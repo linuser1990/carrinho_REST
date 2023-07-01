@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Gerenciamento de Vendas - CLIENTES</title>
+    <!-- Adicionando o CSS do Bootstrap -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+</head>
+<body>
+
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="/">INICIO</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+      
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav mr-auto">
+            
+           
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="/clientes" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                CLIENTES
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" href="/clientes">LISTA DE CLIENTES</a>
+                <a class="dropdown-item" href="/add">CADASTRAR CLIENTE</a>
+              </div>
+            </li>
+
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  PRODUTOS
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <a class="dropdown-item" href="/produtos">LISTA DE PRODUTOS</a>
+                  <a class="dropdown-item" href="/addProdutos">CADASTRAR PRODUTOS</a>
+                </div>
+              </li>
+
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  VENDAS
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <a class="dropdown-item" href="/venda">VENDER</a>
+                  <a class="dropdown-item" href="/historico_vendas">HISTÓRICO DE VENDAS</a>
+                </div>
+              </li>
+
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  RELATÓRIOS
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <a class="dropdown-item" href="/relvendas">REL. VENDAS</a>
+                </div>
+              </li>
+
+          </ul>
+          <form class="form-inline my-2 my-lg-0">
+            <input class="form-control mr-sm-2" type="search" placeholder="Pesquisar" aria-label="Search">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Pesquisar</button>
+          </form>
+        </div>
+      </nav>
+
+    <!-- Criando a tabela -->
+    
+    <div class="container mt-4">
+        <table id="tableClientes" name="tableClientes" class="table table-striped table-active">
+            <thead>
+                <tr>
+                    <th>Código</th>
+                    <th>Nome</th>
+                    <th>Endereço</th>
+                    <th>CPF</th>
+                    <th>Celular</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody">
+                <%
+                    var p = pessoas.length;
+                    for(var i=0;i<p;i++)
+                {
+                %>
+                
+                <tr>
+                    <td><a href="/editar/<%= pessoas[i].codcli%>"> <%=pessoas[i].codcli%> </a> </td>
+                    <td><a href="/editar/<%= pessoas[i].codcli%>"> <%=pessoas[i].nome%></a> </td>
+                    <td><%=pessoas[i].endereco%></td>
+                    <td><%=pessoas[i].cpf%></td>
+                    <td><%=pessoas[i].cel%></td>
+                    
+                    <td><a href="" onclick="deleteItem(event, '<%=pessoas[i].codcli%>')">Excluir</a></a> - 
+                        <a href="/editar/<%= pessoas[i].codcli%>" > Alterar </a> 
+                    
+                    </td>
+                   
+                </tr>
+                
+                
+        <%
+            }	
+        %>
+                
+
+            </tbody>
+        </table>
+    </div>
+
+    
+
+<script>
+function deleteItem(event, codigo) {
+  event.preventDefault(); // Impede o comportamento padrão de redirecionamento
+
+  fetch('/clientes/'+codigo, {
+    method: 'DELETE'
+  })
+    .then(response => {
+      // Verifica o status da resposta
+      if (response.ok) {
+        // A solicitação DELETE foi bem-sucedida
+        console.log('Item excluído com sucesso!');
+
+        //recarrega apenas a tabela
+        refreshTable();
+
+        //recarrega a pagina
+        //window.location.reload();
+      } else {
+        // A solicitação DELETE falhou
+        console.error('Falha ao excluir o item.');
+      }
+    })
+    .catch(error => {
+      console.error('Ocorreu um erro ao excluir o item:', error);
+    });
+}
+</script>
+
+
+<!--ATUALIZA APENAS A TABELA , NAO RECARREGA A PAGINA INTEIRA-->
+<script>
+function refreshTable() {
+  // Faz uma requisição AJAX para obter os dados atualizados da tabela
+  fetch('/clientes')
+    .then(response => response.text())
+    .then(data => {
+      // Atualiza apenas o conteúdo da tabela
+      document.getElementById('tableBody').innerHTML = getTableBodyHtml(data);
+    })
+    .catch(error => {
+      console.error('Ocorreu um erro ao atualizar a tabela:', error);
+    });
+}
+</script>
+
+
+<!--APEGA O ESTADO INICIAL DA TABELA -->
+<script>
+function getTableBodyHtml(data) {
+    // Parseia os dados HTML retornados pela requisição e extrai apenas o conteúdo da tabela
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(data, 'text/html');
+    const tableBody = doc.querySelector('#tableClientes tbody');
+  
+    // Retorna o conteúdo HTML da tabela
+    return tableBody.innerHTML;
+  }
+
+</script>
+  
+  
+  
+  
+  
+  
+  
+
+    <!-- Adicionando o JS do Bootstrap -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
+</html>
+
