@@ -97,8 +97,8 @@
                     <td><%=pessoas[i].cel%></td>
                     
                     <td><a href="" onclick="deleteItem(event, '<%=pessoas[i].codcli%>')">Excluir</a></a> - 
-                        <a href="/editar/<%= pessoas[i].codcli%>" > Alterar </a> 
-                    
+                        <button onclick="showEditForm('<%=pessoas[i].codcli%>')">Editar</button></a></a> - 
+                        
                     </td>
                    
                 </tr>
@@ -113,8 +113,14 @@
         </table>
     </div>
 
+    <script>
+      function showEditForm(codigo) {
+     
+        window.location.replace("/clientes/"+codigo);
+      }
+      </script>
     
-
+<!--CHAMA A ROTA E PASSA O CODIGO PARA DELETAR-->
 <script>
 function deleteItem(event, codigo) {
   event.preventDefault(); // Impede o comportamento padrão de redirecionamento
@@ -175,12 +181,6 @@ function getTableBodyHtml(data) {
   }
 
 </script>
-  
-  
-  
-  
-  
-  
   
 
     <!-- Adicionando o JS do Bootstrap -->

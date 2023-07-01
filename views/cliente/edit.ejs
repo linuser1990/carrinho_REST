@@ -1,0 +1,74 @@
+<%- include('../header'); %>
+
+<form method="post" action="/alterar/<%=pessoas[0].codcli%>">
+	<table class="styled-table">
+
+		<th>
+		<td> </td><td> </td><td> </td>
+		</th>
+		
+		<tr>
+			<td class="label">
+				Código
+			</td>
+
+			<td>
+				<input type="text" name="codigo" id="codgo" value="<%=pessoas[0].codcli%>"  readonly>
+			</td>
+		</tr>
+		
+
+		<tr>
+			<td class="label">
+				Nome:
+			</td>
+
+			<td>
+				<input type="text"" name="nome" id="nome" value="<%=pessoas[0].nome%>">
+			</td>
+		</tr>
+
+		<tr>
+
+			<tr>
+				<td class="label">
+					Endereço:
+				</td>
+	
+				<td>
+					<input type="text"" name="endereco" id="endereco" value="<%=pessoas[0].endereco%>">
+				</td>
+			</tr>
+			<tr>
+				<td class="label">
+					CPF:
+				</td>
+	
+				<td>
+					<input type="text"" name="cpf" id="cpf" value="<%=pessoas[0].cpf%>">
+				</td>
+			</tr>
+	
+			<tr>
+	
+			<tr>
+			<td class="label">
+				Celular:
+			</td>
+
+			<td>
+				<input type="text" name="cel" id="cel" value="<%=pessoas[0].cel%>">
+			</td>
+		</tr>
+
+
+
+	</table>
+
+<input type="hidden" name="codcli" id="codcli" value="<%=pessoas[0].codcli%>">
+
+<input type="submit" value="Alterar"> 
+<input type="button" value="Cancelar" onclick="cancelar();">
+</form>
+
+<%- include('../footer'); %>

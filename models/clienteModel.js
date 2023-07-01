@@ -4,9 +4,9 @@ const pool = require('../db/db');
 const getAllClientes = async (req, res) => {
   try {
     const { rows } = await pool.query('SELECT * FROM cliente');
-    
+
     //renderiza a view clientes e passa a variavel pessoas contendo o resultado da query sql
-    res.render('clientes',{pessoas: rows});
+    res.render('./cliente/index',{pessoas: rows});
   } catch (error) {
     res.status(500).json({ error: 'Erro ao listar os clientes' });
   }
@@ -14,13 +14,13 @@ const getAllClientes = async (req, res) => {
 
 // Obter um cliente por ID
 const getClienteById = async (req, res) => {
-  const { id } = req.params;
-
+  const { codcli } = req.params;
+   
   try {
-    const { rows } = await pool.query('SELECT * FROM cliente WHERE codcli = $1', [id]);
+    const { rows } = await pool.query('SELECT * FROM cliente WHERE codcli = $1', [codcli]);
 
     if (rows.length > 0) {
-      res.json(rows[0]);
+      res.render('./cliente/edit',{pessoas: rows})
     } else {
       res.status(404).json({ error: 'Cliente não encontrado' });
     }
@@ -78,10 +78,12 @@ const deleteCliente = async (req, res) => {
   }
 };
 
+
 module.exports = {
   getAllClientes,
   getClienteById,
   createCliente,
   updateCliente,
   deleteCliente,
+  
 };
