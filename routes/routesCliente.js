@@ -6,7 +6,7 @@ const clienteController = require('../models/clienteModel');
 router.get('/', clienteController.getAllClientes);
 router.get('/:codcli', clienteController.getClienteById);
 router.post('/', clienteController.createCliente);
-router.put('/:codcli', clienteController.updateCliente);
+//router.put('/:codcli', clienteController.updateCliente);
 router.delete('/:codcli', clienteController.deleteCliente);
 
 router.post('/:codcli', clienteController.updateCliente);

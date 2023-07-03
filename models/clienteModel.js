@@ -4,7 +4,7 @@ const pool = require('../db/db');
 // Listar todos os clientes
 const getAllClientes = async (req, res) => {
   try {
-    const { rows } = await pool.query('SELECT * FROM cliente');
+    const { rows } = await pool.query('SELECT * FROM cliente order by nome');
 
     //renderiza a view clientes e passa a variavel pessoas contendo o resultado da query sql
     res.render('./cliente/index',{pessoas: rows});

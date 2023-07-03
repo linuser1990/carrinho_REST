@@ -3,6 +3,7 @@ const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
 const clientesRoutes = require('./routes/routesCliente');
+const homeRoutes = require('./routes/routersHome');
 //const produtosRoutes = require('./routes/routesProduto');
 
 
@@ -12,18 +13,23 @@ const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
+
 //aceitando EJS
 app.set('view engine', 'ejs');
 //app.set('views', './views');
  
-
+//NECESSARIO PARA USAR O ARQUIVOS DE OUTRA PASTA
+//REMOVE ERRO DE MIME TYPE CSS
+//NECESSARIO PARA USAR AS IMAGENS DO DIRETORIO 'imagens'
 // Defina o diretório de views
 app.set('views', path.join(__dirname, 'views'));
+app.use(express.static(path.join(__dirname, '/')));
 
 
 // Rotas
 app.use('/clientes', clientesRoutes);
 //app.use('/produtos', produtosRoutes);
+app.use('/home',homeRoutes);
 
 
 // Porta em que o servidor irá rodar
