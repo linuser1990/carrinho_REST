@@ -1,5 +1,6 @@
 const pool = require('../db/db');
 
+
 // Listar todos os clientes
 const getAllClientes = async (req, res) => {
   try {
@@ -45,19 +46,20 @@ const createCliente = async (req, res) => {
 
 // Atualizar um cliente
 const updateCliente = async (req, res) => {
-  const { id } = req.params;
-  const { nome, email } = req.body;
-
+ const { codcli } = req.params;
+ const { nome, endereco,cpf,cel } = req.body;
+  
   try {
-    const { rows } = await pool.query('UPDATE cliente SET nome = $1, email = $2 WHERE codcli = $3 RETURNING *', [nome, email, id]);
+    const { rows } = await pool.query('UPDATE cliente SET nome = $1, endereco= $2, '+
+    'cpf = $3, cel = $4 WHERE codcli = $5 RETURNING *', [nome,endereco,cpf,cel,codcli]);
 
     if (rows.length > 0) {
-      res.json(rows[0]);
+      res.redirect('/clientes');
     } else {
       res.status(404).json({ error: 'Cliente não encontrado' });
     }
   } catch (error) {
-    res.status(500).json({ error: 'Erro ao atualizar o cliente' });
+    res.status(500).json({ error: 'Erro ao atualizar o cliente',error });
   }
 };
 

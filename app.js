@@ -10,6 +10,7 @@ const app = express();
 
 // Middleware para o parsing do corpo das requisições
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 
 //aceitando EJS
 app.set('view engine', 'ejs');

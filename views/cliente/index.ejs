@@ -96,9 +96,8 @@
                     <td><%=pessoas[i].cpf%></td>
                     <td><%=pessoas[i].cel%></td>
                     
-                    <td><a href="" onclick="deleteItem(event, '<%=pessoas[i].codcli%>')">Excluir</a></a> - 
-                        <button onclick="showEditForm('<%=pessoas[i].codcli%>')">Editar</button></a></a> - 
-                        
+                    <td><a href="" onclick="deleteItem(event, '<%=pessoas[i].codcli%>')">Excluir</a>-
+                        <button onclick="showEditForm('<%=pessoas[i].codcli%>')">Editar</button>
                     </td>
                    
                 </tr>
@@ -113,12 +112,12 @@
         </table>
     </div>
 
-    <script>
-      function showEditForm(codigo) {
+<script>
+    function showEditForm(codigo) {
      
-        window.location.replace("/clientes/"+codigo);
-      }
-      </script>
+      window.location.replace("/clientes/"+codigo);
+    }
+</script>
     
 <!--CHAMA A ROTA E PASSA O CODIGO PARA DELETAR-->
 <script>
