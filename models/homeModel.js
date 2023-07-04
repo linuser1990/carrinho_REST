@@ -1,10 +1,7 @@
-
-const redirecionaHome = async (req,res) =>
-{
-     res.render('./home/index');
-    
+const redirecionaHome = async (req, res) => {
+  res.render('./home/index')
 }
 
 module.exports = {
- redirecionaHome
+  redirecionaHome
 }
