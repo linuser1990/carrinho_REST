@@ -26,7 +26,7 @@ const getClienteById = async (req, res) => {
       res.status(404).json({ error: 'Cliente não encontrado' });
     }
   } catch (error) {
-    res.status(500).json({ error: 'Erro ao obter o cliente' });
+    res.status(500).json({ error: 'Erro ao obter o cliente',error });
   }
 };
 
@@ -36,7 +36,7 @@ const createCliente = async (req, res) => {
 
   try {
     const { rows } = await pool.query('INSERT INTO cliente (nome,endereco,cpf,cel) VALUES ($1,$2,$3,$4) RETURNING *', [nome,endereco,cpf,cel]);
-    res.status(201).json(rows[0]);
+    res.redirect('/clientes');
   } catch (error) {
     res.status(500).json({ error: 'Erro ao criar o cliente' });
   }
@@ -80,6 +80,19 @@ const deleteCliente = async (req, res) => {
   }
 };
 
+const showCreateView = async (req,res) =>{
+
+  try
+  {
+    res.render('./cliente/create');
+
+  } catch (error) {
+    res.status(500).json({ error: 'Erro 000' ,error});
+  }
+  
+ 
+}
+
 
 module.exports = {
   getAllClientes,
@@ -87,5 +100,6 @@ module.exports = {
   createCliente,
   updateCliente,
   deleteCliente,
+  showCreateView
   
 };

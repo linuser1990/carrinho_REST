@@ -16,7 +16,6 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 //aceitando EJS
 app.set('view engine', 'ejs');
-//app.set('views', './views');
  
 //NECESSARIO PARA USAR O ARQUIVOS DE OUTRA PASTA
 //REMOVE ERRO DE MIME TYPE CSS
@@ -34,6 +33,7 @@ app.use('/home',homeRoutes);
 
 // Porta em que o servidor irá rodar
 const PORT = process.env.PORT;
+
 
 // Iniciar o servidor
 app.listen(PORT, () => {
