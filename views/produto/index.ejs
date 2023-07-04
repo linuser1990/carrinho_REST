@@ -1,0 +1,50 @@
+<%- include('../header'); %>
+<form method="post" action="/produtosFiltro">
+    Pesquisar:<input type="text" id="filtro" name="filtro" > 
+    <input type="submit" value="Pesquisar">
+
+</form>
+
+<br>
+<table class="styled-table">
+    <thead>
+        <tr>
+            <th>Código</th>
+            <th>Nome</th>
+            <th>Preço venda</th>
+            <th>Preço custo</th>
+            <th>Estoque</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+    
+	<%
+		var p = produtos.length;
+		for(var i=0;i<p;i++)
+		{
+	%>
+            <tr>
+                <td><%=produtos[i].codpro%></td>
+                <td><%=produtos[i].nome%></td>
+                <td><%=produtos[i].precovenda%></td>
+                <td><%=produtos[i].precocusto%></td>
+                <td><%=produtos[i].estoque%></td>
+                <td><a href="/deletarProduto/<%=produtos[i].codpro%>"> Deletar </a> - 
+                    <a href="/editarProduto/<%= produtos[i].codpro%>" > Alterar </a> 
+                
+                </td>
+               
+            </tr>
+			
+	<%
+		}	
+	%>
+        <!-- and so on... -->
+    </tbody>
+</table>
+
+
+	
+
+<%- include('../footer'); %>

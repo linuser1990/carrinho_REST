@@ -1,7 +1,9 @@
 const pool = require('../db/db')
+//const ordem = "nome";
 
 // Listar todos os clientes
 const getAllClientes = async (req, res) => {
+  
   try {
     const { rows } = await pool.query('SELECT * FROM cliente order by nome')
 

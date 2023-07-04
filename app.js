@@ -1,41 +1,36 @@
-require('dotenv').config();
-const express = require('express');
-const path = require('path');
-const bodyParser = require('body-parser');
-const clientesRoutes = require('./routes/routesCliente');
-const homeRoutes = require('./routes/routersHome');
-//const produtosRoutes = require('./routes/routesProduto');
+require('dotenv').config()
+const express = require('express')
+const path = require('path')
+const bodyParser = require('body-parser')
+const clientesRoutes = require('./routes/routesCliente')
+const homeRoutes = require('./routes/routesHome')
+const produtosRoutes = require('./routes/routesProduto');
 
-
-const app = express();
+const app = express()
 
 // Middleware para o parsing do corpo das requisições
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: false }))
 
+// aceitando EJS
+app.set('view engine', 'ejs')
 
-//aceitando EJS
-app.set('view engine', 'ejs');
- 
-//NECESSARIO PARA USAR O ARQUIVOS DE OUTRA PASTA
-//REMOVE ERRO DE MIME TYPE CSS
-//NECESSARIO PARA USAR AS IMAGENS DO DIRETORIO 'imagens'
+// NECESSARIO PARA USAR O ARQUIVOS DE OUTRA PASTA
+// REMOVE ERRO DE MIME TYPE CSS
+// NECESSARIO PARA USAR AS IMAGENS DO DIRETORIO 'imagens'
 // Defina o diretório de views
-app.set('views', path.join(__dirname, 'views'));
-app.use(express.static(path.join(__dirname, '/')));
-
+app.set('views', path.join(__dirname, 'views'))
+app.use(express.static(path.join(__dirname, '/')))
 
 // Rotas
-app.use('/clientes', clientesRoutes);
-//app.use('/produtos', produtosRoutes);
-app.use('/home',homeRoutes);
-
+app.use('/clientes', clientesRoutes)
+app.use('/produtos', produtosRoutes);
+app.use('/home', homeRoutes)
 
 // Porta em que o servidor irá rodar
-const PORT = process.env.PORT;
-
+const PORT = process.env.PORT
 
 // Iniciar o servidor
 app.listen(PORT, () => {
-  console.log(`Servidor rodando na porta ${PORT}`);
-});
+  console.log(`Servidor rodando na porta ${PORT}`)
+})
