@@ -1,0 +1,69 @@
+<%- include('../header'); %>
+
+<form method="post" action="/produtos/updateProduto/<%=produto[0].codpro%>">
+	<table class="styled-table">
+
+		<th>
+		<td> </td><td> </td><td> </td>
+		</th>
+		
+		<tr>
+			<td class="label">
+				C�digo
+			</td>
+
+			<td>
+				<input type="text" id="codcli" name="codcli" value="<%=produto[0].codpro%>"  readonly>
+			</td>
+		</tr>
+		
+
+		<tr>
+			<td class="label">
+				Nome:
+			</td>
+
+			<td>
+				<input type="text" name="nome" id="nome" value="<%=produto[0].nome%>">
+			</td>
+		</tr>
+
+		<tr>
+			<td class="label">
+				Preço Venda:
+			</td>
+
+			<td>
+				<input type="text" name="precovenda" id="precovenda" value="<%=produto[0].precovenda%>">
+			</td>
+		</tr>
+
+		<tr>
+			<td class="label">
+				Preço Custo:
+			</td>
+
+			<td>
+				<input type="text" name="precocusto" id="precocusto" value="<%=produto[0].precocusto%>">
+			</td>
+		</tr>
+
+		<tr>
+			<td class="label">
+				Estoque:
+			</td>
+
+			<td>
+				<input type="text" name="estoque" id="estoque" value="<%=produto[0].estoque%>">
+			</td>
+		</tr>
+
+
+	</table>
+
+
+<input type="submit" value="Alterar"> 
+<input type="button" value="Cancelar.." onclick="cancelar();">
+</form>
+
+<%- include('../footer'); %>

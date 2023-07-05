@@ -1,0 +1,51 @@
+<%- include('../header'); %>
+
+
+    <div class="container">
+      <h2>Novo Produto</h2>
+      <form method="post" action="/produtos">
+        <div class="form-group">
+          <label for="nome">Nome:</label>
+          <input type="text" class="form-control" placeholder="Digite o nome do produto" id="nome" name="nome">
+        </div>
+
+
+		<div class="form-group">
+			<label for="precovenda">Preço de Venda:</label>
+			<div class="input-group">
+			  <div class="input-group-prepend">
+				<span class="input-group-text">R$</span>
+			  </div>
+			  <input type="tel" step="0.01" min="0" placeholder="R$ 0.00" onkeyup="formatCurrency(this)" id="precovenda" name="precovenda" >
+			</div>
+		  </div>
+
+        <div class="form-group">
+          <label for="precocusto">Preço de Custo:</label>
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text">R$</span>
+            </div>
+            <input type="tel" step="0.01" min="0" placeholder="R$ 0.00" onkeyup="formatCurrency(this)" class="form-control"   id="precocusto" name="precocusto" aria-label="Amount (to the nearest dollar)">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="estoque">Estoque:</label>
+          <input type="number" class="form-control" placeholder="Digite o estoque" value="0" id="estoque" name="estoque" step="0.01">
+        </div>
+        <button type="submit" class="btn btn-success">Salvar</button>
+        <button type="button" class="btn btn-danger" onclick="cancelar();">Cancelar</button>
+      </form>
+    </div>
+
+	<!-- //FORMATA OS CAMPOS DE VALORES -->
+	<script>
+		function formatCurrency(input) {
+		  let value = input.value.replace(/[^\d]/g, '');
+		  value = value / 100;
+		  value = value.toFixed(2).replace(',', '.');
+		  input.value =  value;
+		}
+	  </script>
+
+<%- include('../footer'); %>

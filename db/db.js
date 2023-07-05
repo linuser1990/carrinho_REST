@@ -1,6 +1,5 @@
-require('dotenv').config();
-const { Pool } = require('pg');
-
+require('dotenv').config()
+const { Pool } = require('pg')
 
 // Configurações do banco de dados
 const pool = new Pool({
@@ -8,10 +7,7 @@ const pool = new Pool({
   password: process.env.DB_PASS,
   host: process.env.DB_HOST,
   port: process.env.DB_PORT,
-  database: process.env.DB_NAME,
-});
+  database: process.env.DB_NAME
+})
 
-
-module.exports = pool;
-
-
+module.exports = pool

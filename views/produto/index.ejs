@@ -6,7 +6,7 @@
 </form>
 
 <br>
-<table class="styled-table">
+<table id="tableProdutos" name="tableProdutos" class="styled-table">
     <thead>
         <tr>
             <th>Código</th>
@@ -17,7 +17,7 @@
             <th></th>
         </tr>
     </thead>
-    <tbody>
+    <tbody id="tableBody" name="tableBody">
     
 	<%
 		var p = produtos.length;
@@ -30,9 +30,9 @@
                 <td><%=produtos[i].precovenda%></td>
                 <td><%=produtos[i].precocusto%></td>
                 <td><%=produtos[i].estoque%></td>
-                <td><a href="/deletarProduto/<%=produtos[i].codpro%>"> Deletar </a> - 
-                    <a href="/editarProduto/<%= produtos[i].codpro%>" > Alterar </a> 
-                
+                <td><a href="" onclick="deleteItem(event,'<%=produtos[i].codpro%>')"> Deletar </a> - 
+                    <button onclick="showEditForm('<%=produtos[i].codpro%>')">Editar</button>
+                   
                 </td>
                
             </tr>
@@ -44,7 +44,70 @@
     </tbody>
 </table>
 
+<script>
+    function showEditForm(codigo) {
+     console.log('codigo: '+codigo);
+      window.location.replace("/produtos/"+codigo);
+    }
+</script>
 
-	
+<!--CHAMA A ROTA E PASSA O CODIGO PARA DELETAR-->
+<script>
+    function deleteItem(event, codigo) {
+      event.preventDefault(); // Impede o comportamento padrão de redirecionamento
+    
+      fetch('/produtos/'+codigo, {
+        method: 'DELETE'
+      })
+        .then(response => {
+          // Verifica o status da resposta
+          if (response.ok) {
+            // A solicitação DELETE foi bem-sucedida
+            console.log('Item excluído com sucesso!');
+    
+            //recarrega apenas a tabela
+            refreshTable();
+    
+            //recarrega a pagina
+            //window.location.reload();
+          } else {
+            // A solicitação DELETE falhou
+            console.error('Falha ao excluir o item.');
+          }
+        })
+        .catch(error => {
+          console.error('Ocorreu um erro ao excluir o item:', error);
+        });
+    }
+    </script>
+        
+    <!--ATUALIZA APENAS A TABELA , NAO RECARREGA A PAGINA INTEIRA-->
+    <script>
+    function refreshTable() {
+      // Faz uma requisição AJAX para obter os dados atualizados da tabela
+      fetch('/produtos')
+        .then(response => response.text())
+        .then(data => {
+          // Atualiza apenas o conteúdo da tabela
+          document.getElementById('tableBody').innerHTML = getTableBodyHtml(data);
+        })
+        .catch(error => {
+          console.error('Ocorreu um erro ao atualizar a tabela:', error);
+        });
+    }
+    </script>
+    
+    <!--PEGA O ESTADO INICIAL DA TABELA -->
+    <script>
+    function getTableBodyHtml(data) {
+        // Parseia os dados HTML retornados pela requisição e extrai apenas o conteúdo da tabela
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(data, 'text/html');
+        const tableBody = doc.querySelector('#tableProdutos tbody');
+      
+        // Retorna o conteúdo HTML da tabela
+        return tableBody.innerHTML;
+      }
+    </script>
 
 <%- include('../footer'); %>

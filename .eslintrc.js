@@ -16,6 +16,8 @@ module.exports = {
         sourceType: 'script'
       }
     }
+
+    
   ],
   parserOptions: {
     ecmaVersion: 'latest',
