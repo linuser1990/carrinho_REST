@@ -1,0 +1,152 @@
+<%- include('../header'); %>
+
+<!--
+MUDA A COR DO BOTAO AO CLICAR EM ADICIONAR
+UTILIZA ESSES DOIS LINKS
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+ -->
+ <script>
+    $(document).ready(function() {
+      $('#adicionar').click(function() {
+        $(this).removeClass('btn-light').addClass('btn-success').text('ADICIONADO COM SUCESSO');
+        setTimeout(function() {
+          $('#adicionar').removeClass('btn-success').addClass('btn-secondary').text('Adicionar ao carrinho');
+        }, 600);
+      });
+    });
+  </script>
+
+  <script>
+     $(document).ready(function() {
+      $('#alertaEstoque').hide();
+      $('#alertaRepetido').hide();
+      $('#alertaEstDisp').hide();
+    }) 
+
+  </script>
+
+ 
+<style>
+    .btn-with-image {
+      background-image: url('imagens/addcarrinho.png');
+      background-repeat: no-repeat;
+      background-size: 20% 100%;
+      background-position: right;
+      padding: 10px 20px;
+      color: #fff;
+      text-align: center;
+    }
+  </style>
+
+
+<form id="form" name="form" method="post" action="/venda/inserirvendacarrinho" class="form">
+
+    <div class="form-group">
+        <!-- <label for="selectcliente">Cliente:</label> -->
+        <a href="/add">CADASTRAR CLIENTE</a>
+        <select id="selectcliente" name="selectcliente" onchange="getSelectedValue();" class="form-control">
+            <option selected disabled hidden>Selecione um cliente</option>
+            <% var c = clientes.length;
+            for(var i=0;i<c;i++) { %>
+                <option value="<%=clientes[i].codcli%>"><%=clientes[i].nome%></option>
+            <% } %>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <!-- <label for="selectproduto">Produto:</label> -->
+        <a href="/addProdutos">CADASTRAR PRODUTO</a>
+        <select id="selectproduto" name="selectproduto" onchange="getSelectedValue();subtotalVenda();estoqueAtual();" class="form-control">
+            <option selected disabled hidden>Selecione um produto</option>
+            <% var p = produtos.length;
+            for(var i=0;i<p;i++) { %>
+                <option value="<%=produtos[i].codpro%>,<%=produtos[i].precovenda%>"><%=produtos[i].nome%></option>
+            <% } %>
+        </select>
+    </div>
+
+    <input type="hidden" name="codcli" id="codcli">
+    <input type="hidden" name="codpro" id="codpro">
+    <input type="hidden" name="precovenda" id="precovenda">
+
+    <h6 id="alertaEstDisp" style="color: green;">Em estoque:</h6>
+      
+
+    <div class="form-group">
+        <label for="qtd">Quantidade:</label> 
+        <input type="tel" name="qtd" id="qtd" value="1" placeholder="Digite a quantidade" onkeyup="subtotalVenda()" class="form-control">
+        <h6 id="alertaEstoque" style="color: red;">Valor maior doque disponivel em estoque</h6>
+        <h6 id="alertaRepetido" style="color: red;">Produto já adicionado na lista</h6>
+      
+      </div>
+    <!--AO CLICAR EM ADICIONAR AO CARRINHO, CHAMA A FUNÇÃO EM JS QUE ARMAZENA OS VALUES DOS CAMPOS PARA A ROTA /addCarrinho -->
+    <button onclick="redirecionarParaCarrinho2();" id="adicionar" name="adicionar" type="button" class="btn btn-block btn-secondary btn-with-image">Adicionar ao carrinho </button> 
+
+    <div class="form-group">
+        <label for="subtotal">Sub Total R$:</label>
+        <input type="text" name="subtotal" id="subtotal" value="0" placeholder="R$ 0.00" class="form-control">
+    </div>
+
+    <div class="form-group">
+        <label for="total">Total R$:</label>
+        <input type="text" name="total" id="total" value="0" placeholder="R$ 0.00" class="form-control">
+    </div>
+
+    <input type="submit" value="Finalizar venda" onclick="limparCampo();" class="btn btn-success btn-block">
+
+</form>
+<br>
+<p id="textoOculto" style="display: none;">ADICIONADO COM SUCESSO!</p>
+
+
+<!-- LIMPA OS CAMPOS AO CLICAR NO BOTAO SALVAR VENDA -->
+<script>
+  document.getElementById('form').addEventListener('submit', function(event) {
+    // Impede o envio do formulário
+    event.preventDefault();
+    
+    // Limpa os campos
+    document.getElementById('total').value = '0';
+    document.getElementById('subtotal').value = '0';
+    document.getElementById('qtd').value = '1';
+
+    //habilita o select 'cliente'
+    var selectCliente = document.getElementById("selectcliente");
+    selectCliente.disabled = false;
+    
+    // Submete o formulário
+    this.submit();
+  });
+</script>
+
+<!-- VERIFICA ESTOQUE AO INSERIR QUANTIDADE -->
+<script>
+  $(document).ready(function() {
+    $('#qtd').keyup(function() {
+      //PEGA O VALUE DO INPUT qtd
+      const qtd = $(this).val();
+
+      //PEGA O VALUE DO INPUT codpro
+      const codpro = $('#codpro').val();
+      
+      //CHAMA A ROTA e passa os parametros qtd,codpro
+      $.post('/venda/verificaEstoque', { qtd,codpro}, function(response) {
+          if(response=='maior')
+          {
+              //Habilita o botão adicionar
+              $('#adicionar').prop('disabled', false);
+              $("#alertaEstoque").hide();
+     
+          }else
+          {
+              $('#adicionar').prop('disabled', true);
+              $('#subtotal').val('0');
+              $("#alertaEstoque").show();
+          }
+        //$('#msg').val(response);
+      });
+    });
+  });
+</script>
+<%- include('../footer'); %>

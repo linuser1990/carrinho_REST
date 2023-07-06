@@ -5,6 +5,7 @@ const bodyParser = require('body-parser')
 const clientesRoutes = require('./routes/routesCliente')
 const homeRoutes = require('./routes/routesHome')
 const produtosRoutes = require('./routes/routesProduto');
+const vendasRoutes = require('./routes/routesVenda')
 
 const app = express()
 
@@ -26,6 +27,7 @@ app.use(express.static(path.join(__dirname, '/')))
 app.use('/clientes', clientesRoutes)
 app.use('/produtos', produtosRoutes);
 app.use('/home', homeRoutes)
+app.use('/venda', vendasRoutes)
 
 // Porta em que o servidor irá rodar
 const PORT = process.env.PORT
