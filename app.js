@@ -29,6 +29,10 @@ app.use('/produtos', produtosRoutes);
 app.use('/home', homeRoutes)
 app.use('/venda', vendasRoutes)
 
+app.get('/', (req, res) => {
+  res.redirect('/home')
+})
+
 // Porta em que o servidor irá rodar
 const PORT = process.env.PORT
 

@@ -1,0 +1,67 @@
+<%- include('../header'); %>
+  
+  <div class="container">
+    <h1>Histórico de Vendas-CARRINHO</h1>
+    
+    <form action="/pesquisaRadio" method="post">
+    <div class="container">
+       Escolha a odem de exibição:<br>
+       <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="opcao" id="codvenda" value="codvenda" onclick="this.form.submit()"  onchange="this.form.submit()">
+        <label class="form-check-label" for="codvenda">Código</label>
+      </div>
+
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="opcao" id="total" value="total" onchange="this.form.submit()">
+        <label class="form-check-label" for="total">Valor Total</label>
+      </div>
+    </div>
+    </form>
+
+
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Código</th>
+          <th>Cliente</th>
+          <th>Total</th>
+          <th>Data e Hora</th>
+          <th>Data</th>
+        </tr>
+      </thead>
+      <tbody>
+        <%
+        var r = resultado.length;
+		    for(var i=0;i<r;i++)
+		    {
+          %>
+        <tr onclick="redirect('/detalhes_venda/<%=resultado[i].codvenda%>')">
+          <td><%=resultado[i].codvenda%></td>
+          <td><%=resultado[i].nome_cliente%></td>
+          <td><%=resultado[i].total%></td>
+          <td><%=resultado[i].data_hora%></td>
+          <td><%=resultado[i].datav%></td>
+
+          <td>
+            <a href="/venda/detalhesVenda/<%=resultado[i].codvenda%>"> DETALHES </a> 
+            <a href="/deletarvenda/<%=resultado[i].codvenda%>"> Deletar </a> - 
+            <a href="/editar/<%=resultado[i].codvenda%>" > Alterar </a> 
+        
+          </td>
+
+        </tr>
+      <% } %>
+      </tbody>
+    </table>
+  </div>
+
+  <!--REDIRENCIONA PARA DETALHES AO CLICAR NA ROW LINHA DA TABELA-->
+  <script>
+    function redirect(link) {
+      window.location.href = link;
+    }
+  </script>
+ 
+
+    
+    <%- include('../footer'); %>

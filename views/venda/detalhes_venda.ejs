@@ -1,0 +1,61 @@
+<%- include('../header'); %>
+  
+  <div class="container">
+    <h1>Detalhes Venda-CARRINHO</h1>
+    
+    <form action="/pesquisaRadio" method="post">
+    <div class="container">
+       Escolha a odem de exibição:<br>
+       <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="opcao" id="codvenda" value="codvenda" onclick="this.form.submit()"  onchange="this.form.submit()">
+        <label class="form-check-label" for="codvenda">Código</label>
+      </div>
+
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="opcao" id="total" value="total" onchange="this.form.submit()">
+        <label class="form-check-label" for="total">Valor Total</label>
+      </div>
+    </div>
+    </form>
+
+
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Código Venda</th>
+          <th>Cliente</th>
+          <th>Produto</th>
+          <th>Quantidade</th>
+          <th>Subtotal</th>
+        </tr>
+      </thead>
+      <tbody>
+        <%
+        var r = resultado.length;
+		    for(var i=0;i<r;i++)
+		    {
+          %>
+        <tr>
+          <td><%=resultado[i].codvenda%></td>
+          <td><%=resultado[i].nome_cliente%></td>
+          <td><%=resultado[i].nome_produto%></td>
+          <td><%=resultado[i].quantidade%></td>
+          <td><%=resultado[i].subtotal%></td>
+
+          <td>
+            
+            <a href="/deletarvenda/<%=resultado[i].codvenda%>"> Deletar </a> - 
+            <a href="/editar/<%=resultado[i].codvenda%>" > Alterar </a> 
+        
+          </td>
+
+        </tr>
+      <% } %>
+      </tbody>
+    </table>
+  </div>
+
+ 
+
+    
+    <%- include('../footer'); %>
