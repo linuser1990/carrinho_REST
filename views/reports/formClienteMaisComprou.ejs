@@ -1,0 +1,36 @@
+<%- include('../header'); %>
+
+  <div class="container">
+    <h1>Selecione o periodo:</h1>
+    <form id="searchForm" method="POST" action="/clientes/relClienteMaisComprouPeriodo">
+      <div class="mb-3">
+        <label for="startDate" class="form-label">Data de Início:</label>
+        <input type="date" class="form-control" id="startDate" name="startDate">
+      </div>
+      <div class="mb-3">
+        <label for="endDate" class="form-label">Data de Fim:</label>
+        <input type="date" class="form-control" id="endDate" name="endDate">
+      </div>
+      <button type="submit" class="btn btn-primary">Pesquisar</button>
+    </form>
+
+    <div id="searchResult" class="mt-4"></div>
+  </div>
+
+  <!--DEFINE A DATA ATUAL PARA PREENCHER O INPUT AO ABRIR A PAGINA-->
+  <script>
+    // Get the current date
+    var currentDate = new Date();
+    
+    // Format the date as "YYYY-MM-DD"
+    var formattedDate = currentDate.toISOString().split("T")[0];
+    
+    // Set the value of the input field
+    document.getElementById("startDate").value = formattedDate;
+
+     // Set the value of the input field
+    document.getElementById("endDate").value = formattedDate;
+    </script>
+
+
+<%- include('../footer'); %>

@@ -1,0 +1,36 @@
+<%- include('../header'); %>
+  
+  <div class="container">
+    <h1>Relatório- Clientes que mais compraram - por periodo</h1>
+    <br>
+    Periodo: <%=datainicio%> até <%=datafim%> 
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Código Cliente</th>
+          <th>Cliente</th>
+          <th>Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        <%
+        var r = resultado.length;
+		    for(var i=0;i<r;i++)
+		    {
+          %>
+        <tr>
+          <td><%=resultado[i].codcli%></td>
+          <td><%=resultado[i].nome_cliente%></td>
+          <td><%=resultado[i].total_comprou%></td>
+          <td><a href="/venda/detalhesVenda/<%=resultado[i].codvenda%>">DETALHES_</a></td>
+        </tr>
+        
+      <% } %>
+      </tbody>
+    </table>
+  </div>
+
+ 
+
+    
+    <%- include('../footer'); %>

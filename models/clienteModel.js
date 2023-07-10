@@ -1,9 +1,8 @@
 const pool = require('../db/db')
-//const ordem = "nome";
+// const ordem = "nome";
 
 // Listar todos os clientes
 const getAllClientes = async (req, res) => {
-  
   try {
     const { rows } = await pool.query('SELECT * FROM cliente order by nome')
 
@@ -58,7 +57,7 @@ const updateCliente = async (req, res) => {
       res.status(404).json({ error: 'Cliente não encontrado' })
     }
   } catch (error) {
-    res.status(500).json({ error: 'Erro ao atualizar o cliente', error })
+    res.status(500).json({ error: 'Erro ao atualizar o cliente'})
   }
 }
 
@@ -87,12 +86,43 @@ const showCreateView = async (req, res) => {
   }
 }
 
+const relClienteMaisComprouPeriodo = async (req, res) => {
+  const startDate = req.body.startDate
+  const endDate = req.body.endDate
+
+  // FORMATA DATA QUE RECEBEU DOS CALENDARIOS ESCOLHIDO PELO USUARIO
+  const dateStringStart = startDate
+  const parts = dateStringStart.split('-')
+  const formattedDateStart = `${parts[2]}/${parts[1]}/${parts[0]}`
+
+  const dateStringEnd = endDate
+  const parts2 = dateStringEnd.split('-')
+  const formattedDateEnd = `${parts2[2]}/${parts2[1]}/${parts2[0]}`
+
+  const sql = 'select codvenda,cliente.codcli,sum(total) as total_comprou ,cliente.nome as nome_cliente ' +
+  ' from venda inner join cliente on cliente.codcli = venda.cliente_codcli ' +
+  " where data_venda BETWEEN TO_DATE('" + formattedDateStart + "','DD/MM/YYYY') and TO_DATE('" + formattedDateEnd + "','DD/MM/YYYY')group by(codvenda,venda.cliente_codcli,cliente.nome,cliente.codcli) order by total_comprou desc"
+
+  pool.query(sql, (error, results) => {
+    if (error) {
+      throw error
+    }
+
+    res.render('./reports/relClienteMaisComprouPeriodo', { varTitle: 'Sistema de Vendas - Resultado da Pesquisa', resultado: results.rows, datainicio: formattedDateStart, datafim: formattedDateEnd })
+  })
+}
+
+const formClienteMaisComprou = async (req, res) => {
+  res.render('./reports/formClienteMaisComprou')
+}
+
 module.exports = {
   getAllClientes,
   getClienteById,
   createCliente,
   updateCliente,
   deleteCliente,
-  showCreateView
-
+  showCreateView,
+  formClienteMaisComprou,
+  relClienteMaisComprouPeriodo
 }

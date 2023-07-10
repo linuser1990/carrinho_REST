@@ -99,6 +99,7 @@ function redirecionarParaCarrinho2 () {
   const qtd = document.getElementById('qtd').value // Obter o valor do campo de entrada 'qtd'
   const subtotal = document.getElementById('subtotal').value // Obter o valor do campo de entrada 'qtd'
   const campototal = document.getElementById('total')
+  const adicionarBtn = document.getElementById('adicionar')
 
   const alertaRepetido = document.getElementById('alertaRepetido')
 
@@ -128,7 +129,18 @@ function redirecionarParaCarrinho2 () {
         // A VARIAVEL totalgeral É ZERADA TODA VEZ QUE INICIA UMA NOVA VENDA
         // PORQUE ELA PEGA O VALOR 0 PREENCHIDO POR PADRAO NO CAMPO TOTAL
         campototal.value = parseFloat(totalgeral)
-      } else {
+
+        // ALTERA O BOTAO ADICIONAR E VOLTA AO ESTADO INICIAL APÓS O TEMPO DETERMINADO
+        adicionarBtn.classList.remove('btn-light');
+        adicionarBtn.classList.add('btn-success');
+        adicionarBtn.textContent = 'ADICIONADO COM SUCESSO';
+        setTimeout(function() {
+          adicionarBtn.classList.remove('btn-success');
+          adicionarBtn.classList.add('btn-secondary');
+          adicionarBtn.textContent = 'Adicionar ao carrinho';
+        }, 600);
+
+      } else { 
         // EXIBE A MENSAGEM QUE JA FOI ADICIONADO O MESMO PRODUTO E ESCONDE A MENSAGEM APOS ALGUNS SEGUNDOS
         alertaRepetido.style.display = 'block'
         setTimeout(function () {
@@ -140,34 +152,6 @@ function redirecionarParaCarrinho2 () {
       console.error('An error occurred while adding to the cart.') // Optional: Display an error message
     }
   })
-}
-
-// ---------- CODIGO ANTIGO, A APAGINA FICAVA CARREGANDO ----------------
-// CAPTURA OS VALUES DA PAGINA E COLOCA EM UMA URL PASSANDO PARA A ROTA /addCarrinho
-function redirecionarParaCarrinho () {
-  const codpro = document.getElementById('codpro').value // Obter o valor do campo de entrada 'codpro'
-  const codcli = document.getElementById('codcli').value // Obter o valor do campo de entrada 'codcli'
-  const qtd = document.getElementById('qtd').value // Obter o valor do campo de entrada 'qtd'
-  const subtotal = document.getElementById('subtotal').value // Obter o valor do campo de entrada 'qtd'
-  const campototal = document.getElementById('total')
-
-  // soma o subtotal a cada produto adicionado ao carrinho
-  totalgeral = totalgeral + parseFloat(subtotal)
-
-  // preenche o campo total com a soma dos subtotal
-  // A VARIAVEL totalgeral É ZERADA TODA VEZ QUE INICIA UMA NOVA VENDA
-  // PORQUE ELA PEGA O VALOR 0 PREENCHIDO POR PADRAO NO CAMPO TOTAL
-  campototal.value = parseFloat(totalgeral)
-
-  // DESABILITA O SELECT CLIENTE AO INICIAR UMA VENDA PARA NAO MUDAR O CLIENTE NO MEIO DA VENDA
-  const selectCliente = document.getElementById('selectcliente')
-  selectCliente.disabled = true
-
-  // Construir a URL com base nos valores dos campos de entrada
-  const url = '/addCarrinho?codpro=' + encodeURIComponent(codpro) + '&codcli=' + encodeURIComponent(codcli) + '&qtd=' + encodeURIComponent(qtd) + '&subtotal=' + encodeURIComponent(subtotal)
-
-  // Redirecionar para a URL
-  window.location.href = url
 }
 
 function mostrarTexto () {

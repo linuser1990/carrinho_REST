@@ -1,7 +1,7 @@
 <%- include('../header'); %>
   
   <div class="container">
-    <h1>Histórico de Vendas-CARRINHO</h1>
+    <h1>Histórico de Vendas-CARRINHO-PERIODO</h1>
     
     <form action="/pesquisaRadio" method="post">
     <div class="container">
@@ -17,12 +17,10 @@
       </div>
     </div>
     </form>
-
-
     <table class="table table-striped">
       <thead>
         <tr>
-          <th>Código Venda</th>
+          <th>Código</th>
           <th>Cliente</th>
           <th>Total</th>
           <th>Data e Hora</th>
@@ -43,7 +41,7 @@
           <td><%=resultado[i].datav%></td>
 
           <td>
-            <a href="/venda/detalhesVenda/<%=resultado[i].codvenda%>"> DETALHES </a> 
+            <a href="/detalhes_venda/<%=resultado[i].codvenda%>"> DETALHES </a> 
             <a href="/deletarvenda/<%=resultado[i].codvenda%>"> Deletar </a> - 
             <a href="/editar/<%=resultado[i].codvenda%>" > Alterar </a> 
         
@@ -55,8 +53,8 @@
     </table>
   </div>
 
-  <!--REDIRENCIONA PARA DETALHES AO CLICAR NA ROW LINHA DA TABELA-->
-  <script>
+   <!--REDIRENCIONA PARA DETALHES AO CLICAR NA ROW LINHA DA TABELA-->
+   <script>
     function redirect(link) {
       window.location.href = link;
     }
