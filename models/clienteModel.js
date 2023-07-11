@@ -104,9 +104,9 @@ const relClienteMaisComprouPeriodo = async (req, res) => {
   const parts2 = dateStringEnd.split('-')
   const formattedDateEnd = `${parts2[2]}/${parts2[1]}/${parts2[0]}`
 
-  const sql = 'select codvenda,cliente.codcli,sum(total) as total_comprou ,cliente.nome as nome_cliente ' +
+  const sql = 'select cliente.codcli,sum(total) as total_comprou ,cliente.nome as nome_cliente ' +
   ' from venda inner join cliente on cliente.codcli = venda.cliente_codcli ' +
-  " where data_venda BETWEEN TO_DATE('" + formattedDateStart + "','DD/MM/YYYY') and TO_DATE('" + formattedDateEnd + "','DD/MM/YYYY')group by(codvenda,venda.cliente_codcli,cliente.nome,cliente.codcli) order by total_comprou desc"
+  " where data_venda BETWEEN TO_DATE('" + formattedDateStart + "','DD/MM/YYYY') and TO_DATE('" + formattedDateEnd + "','DD/MM/YYYY') GROUP BY (cliente.nome,cliente.codcli) order by total_comprou desc"
 
   if (opcaoExibirResultado === 'pdf') {
     const doc = new PDFDocument()

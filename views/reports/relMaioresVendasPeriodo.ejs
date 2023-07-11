@@ -1,7 +1,7 @@
 <%- include('../header'); %>
   
   <div class="container">
-    <h1>Relatório- Clientes que mais compraram - por periodo</h1>
+    <h1>Relatório- Maiores Vendas - por periodo</h1>
     <br>
     Periodo: <%=datainicio%> até <%=datafim%> 
     <table class="table table-striped">
@@ -10,6 +10,7 @@
           <th>Código Cliente</th>
           <th>Cliente</th>
           <th>Total</th>
+          <th>Data e Hora</th>
         </tr>
       </thead>
       <tbody>
@@ -22,7 +23,9 @@
           <td><%=resultado[i].codcli%></td>
           <td><%=resultado[i].nome_cliente%></td>
           <td><%=resultado[i].total_comprou%></td>
-         </tr>
+          <td><%=resultado[i].data_hora%></td>
+          <td><a href="/venda/detalhesVenda/<%=resultado[i].codvenda%>">DETALHES</a></td>
+        </tr>
         
       <% } %>
       </tbody>

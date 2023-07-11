@@ -84,7 +84,7 @@ const addCarrinho = async (req, res) => {
   }
 }
 
-const inserirvendacarrinho = (req, res) => {
+const inserirvendacarrinho = async (req, res) => {
   try {
     const { codcli } = req.body
     const cols = [codcli, total]
@@ -103,8 +103,8 @@ const inserirvendacarrinho = (req, res) => {
       }
       listaDeObjetos = []
       total = 0
+      res.redirect('/venda/historicoVendas')
     })
-    res.redirect('/venda/historicoVendas')
   } catch (error) {
     console.log(error)
   }
@@ -135,52 +135,119 @@ const detalhesVenda = async (req, res) => {
   }
 }
 
-//CHAMA PAGINA DETALHES VENDA DE TODAS AS VENDAS
+// CHAMA PAGINA DETALHES VENDA DE TODAS AS VENDAS
 const detalhesTodasVendas = async (req, res) => {
   try {
-    const resultados = await pool.query('SELECT *,itens_venda.qtd as quantidade,cliente.nome as nome_cliente, '+
-     ' produto.nome as nome_produto FROM itens_venda inner join produto on produto.codpro = itens_venda.produto_codpro'+
-     ' inner join venda on venda.codvenda = itens_venda.venda_codvenda '+
-     ' inner join cliente on cliente.codcli = venda.cliente_codcli group by (venda.codvenda,produto.codpro,itens_venda.venda_codvenda,itens_venda.produto_codpro,itens_venda.subtotal,itens_venda.qtd,cliente.codcli) order by venda.codvenda desc');
-    
-    res.render('./reports/detalhesTodasVendas', { varTitle: "Sistema de Vendas - Venda",resultado: resultados.rows });
+    const resultados = await pool.query('SELECT *,itens_venda.qtd as quantidade,cliente.nome as nome_cliente, ' +
+     ' produto.nome as nome_produto FROM itens_venda inner join produto on produto.codpro = itens_venda.produto_codpro' +
+     ' inner join venda on venda.codvenda = itens_venda.venda_codvenda ' +
+     ' inner join cliente on cliente.codcli = venda.cliente_codcli group by (venda.codvenda,produto.codpro,itens_venda.venda_codvenda,itens_venda.produto_codpro,itens_venda.subtotal,itens_venda.qtd,cliente.codcli) order by venda.codvenda desc')
+
+    res.render('./reports/detalhesTodasVendas', { varTitle: 'Sistema de Vendas - Venda', resultado: resultados.rows })
   } catch (err) {
-    console.error(err.message);
-    res.status(500).send('Erro no servidor');
+    console.error(err.message)
+    res.status(500).send('Erro no servidor')
   }
 }
 
-const formVendasPeriodo = async (req, res) => {  
-  res.render('./reports/formVendasPeriodo');
+const formVendasPeriodo = async (req, res) => {
+  res.render('./reports/formVendasPeriodo')
+}
+
+const formMaioresVendasPeriodo = async (req, res) => {
+  res.render('./reports/formMaioresVendasPeriodo')
 }
 
 const relVendasPeriodo = async (req, res) => {
-    var startDate = req.body.startDate;
-    var endDate = req.body.endDate;
+  const startDate = req.body.startDate
+  const endDate = req.body.endDate
 
-    //FORMATA DATA QUE RECEBEU DOS CALENDARIOS ESCOLHIDO PELO USUARIO
-    const dateStringStart = startDate;
-    const parts = dateStringStart.split('-');
-    const formattedDateStart = `${parts[2]}/${parts[1]}/${parts[0]}`;
+  // FORMATA DATA QUE RECEBEU DOS CALENDARIOS ESCOLHIDO PELO USUARIO
+  const dateStringStart = startDate
+  const parts = dateStringStart.split('-')
+  const formattedDateStart = `${parts[2]}/${parts[1]}/${parts[0]}`
 
-    const dateStringEnd = endDate;
-    const parts2 = dateStringEnd.split('-');
-    const formattedDateEnd = `${parts2[2]}/${parts2[1]}/${parts2[0]}`;
- 
-    var sql = "SELECT *,TO_CHAR(data_venda,'DD/MM/YYYY') as datav,cliente.nome as nome_cliente "+
-    ' FROM venda inner join cliente on '+
-    'venda.cliente_codcli = cliente.codcli '+
-    " where data_venda BETWEEN TO_DATE('"+formattedDateStart+"','DD/MM/YYYY') and TO_DATE('"+formattedDateEnd+"','DD/MM/YYYY')"+
-    ' order by codvenda desc';
-    pool.query(sql,(error, results) => {
-        if (error) {
-            throw error;
-        }
+  const dateStringEnd = endDate
+  const parts2 = dateStringEnd.split('-')
+  const formattedDateEnd = `${parts2[2]}/${parts2[1]}/${parts2[0]}`
 
-        res.render('./reports/relVendasPeriodo', { varTitle: "Sistema de Vendas - Resultado da Pesquisa", resultado: results.rows,datainicio: formattedDateStart,datafim: formattedDateEnd });
+  const sql = "SELECT *,TO_CHAR(data_venda,'DD/MM/YYYY') as datav,cliente.nome as nome_cliente " +
+    ' FROM venda inner join cliente on ' +
+    'venda.cliente_codcli = cliente.codcli ' +
+    " where data_venda BETWEEN TO_DATE('" + formattedDateStart + "','DD/MM/YYYY') and TO_DATE('" + formattedDateEnd + "','DD/MM/YYYY')" +
+    ' order by codvenda desc'
+  pool.query(sql, (error, results) => {
+    if (error) {
+      throw error
+    }
 
-    });
-  
+    res.render('./reports/relVendasPeriodo', { varTitle: 'Sistema de Vendas - Resultado da Pesquisa', resultado: results.rows, datainicio: formattedDateStart, datafim: formattedDateEnd })
+  })
+}
+
+// VERIFICA SE ESCOLHEU OPÇAO EXIBIR EM PDF OU NO NAVEGADOR
+const relMaioresVendasPeriodo = async (req, res) => {
+  const opcaoExibirResultado = req.body.opcao
+  const startDate = req.body.startDate
+  const endDate = req.body.endDate
+
+  // FORMATA DATA QUE RECEBEU DOS CALENDARIOS ESCOLHIDO PELO USUARIO
+  const dateStringStart = startDate
+  const parts = dateStringStart.split('-')
+  const formattedDateStart = `${parts[2]}/${parts[1]}/${parts[0]}`
+
+  const dateStringEnd = endDate
+  const parts2 = dateStringEnd.split('-')
+  const formattedDateEnd = `${parts2[2]}/${parts2[1]}/${parts2[0]}`
+
+  const sql = 'select codvenda,data_hora,cliente.codcli,sum(total) as total_comprou ,cliente.nome as nome_cliente ' +
+  ' from venda inner join cliente on cliente.codcli = venda.cliente_codcli ' +
+  " where data_venda BETWEEN TO_DATE('" + formattedDateStart + "','DD/MM/YYYY') and TO_DATE('" + formattedDateEnd + "','DD/MM/YYYY') GROUP BY (codvenda,venda.cliente_codcli,cliente.nome,cliente.codcli) order by total_comprou desc"
+
+  if (opcaoExibirResultado === 'pdf') {
+    const doc = new PDFDocument()
+
+    // Configura o cabeçalho do arquivo PDF
+    res.setHeader('Content-Disposition', 'attachment; filename="clientes.pdf"')
+    res.setHeader('Content-Type', 'application/pdf')
+
+    // Consulta os dados do banco de dados
+    try {
+      const result = await pool.query(sql)
+      const resultado = result.rows
+
+      // Gera o conteúdo do arquivo PDF
+      doc.fontSize(16).text('Clientes que mais Compraram por Periodo', { align: 'center' })
+      doc.moveDown()
+
+      resultado.forEach((cliente) => {
+        doc.fontSize(10).text(`Código do cliente: ${cliente.codcli}`)
+        doc.fontSize(14).text(`Nome: ${cliente.nome_cliente}`)
+        doc.fontSize(12).text(`Total: ${cliente.total_comprou}`)
+        doc.fontSize(12).text(`Total: ${cliente.data_hora}`)
+        doc.moveDown()
+      })
+
+      // Gera o arquivo PDF
+      doc.pipe(res)
+      doc.end()
+
+      // Abre o arquivo PDF ao final do processo
+      res.on('finish', () => {
+        exec('xdg-open clientes.pdf')
+      })
+    } catch (error) {
+      console.error('Erro ao consultar o banco de dados:', error)
+      res.status(500).send('Erro ao gerar o arquivo PDF')
+    }
+  } else {
+    pool.query(sql, (error, results) => {
+      if (error) {
+        throw error
+      }
+      res.render('./reports/relMaioresVendasPeriodo', { varTitle: 'Sistema de Vendas - Resultado da Pesquisa', resultado: results.rows, datainicio: formattedDateStart, datafim: formattedDateEnd })
+    })
+  }
 }
 
 module.exports = {
@@ -193,5 +260,7 @@ module.exports = {
   detalhesVenda,
   detalhesTodasVendas,
   formVendasPeriodo,
-  relVendasPeriodo
+  relVendasPeriodo,
+  formMaioresVendasPeriodo,
+  relMaioresVendasPeriodo
 }
