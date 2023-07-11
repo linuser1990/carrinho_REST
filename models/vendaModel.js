@@ -250,6 +250,15 @@ const relMaioresVendasPeriodo = async (req, res) => {
   }
 }
 
+const pesquisaRadioAntigas = async (req, res) => {
+  const { rows } = await pool.query("SELECT *,TO_CHAR(data_venda,'DD/MM/YYYY') as datav,cliente.nome as nome_cliente " +
+  ' FROM venda inner join cliente on ' +
+  ' venda.cliente_codcli = cliente.codcli ' +
+  ' order by codvenda')
+
+  res.render('./venda/index', { resultado: rows })
+}
+
 module.exports = {
   showVendaView,
   verificaEstoque,
@@ -262,5 +271,6 @@ module.exports = {
   formVendasPeriodo,
   relVendasPeriodo,
   formMaioresVendasPeriodo,
-  relMaioresVendasPeriodo
+  relMaioresVendasPeriodo,
+  pesquisaRadioAntigas
 }

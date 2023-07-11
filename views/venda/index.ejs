@@ -3,23 +3,23 @@
   <div class="container">
     <h1>Histórico de Vendas-CARRINHO</h1>
     
-    <form action="/pesquisaRadio" method="post">
+    <form action="#" method="post">
     <div class="container">
        Escolha a odem de exibição:<br>
        <div class="form-check form-check-inline">
-        <input class="form-check-input" type="radio" name="opcao" id="codvenda" value="codvenda" onclick="this.form.submit()"  onchange="this.form.submit()">
-        <label class="form-check-label" for="codvenda">Código</label>
+        <input class="form-check-input" type="radio" name="opcao" id="recentes" value="recentes" checked onclick="refreshTable(event,'recentes')">
+        <label class="form-check-label" for="recentes">Recentes primeiro</label>
       </div>
 
-      <div class="form-check form-check-inline">
-        <input class="form-check-input" type="radio" name="opcao" id="total" value="total" onchange="this.form.submit()">
-        <label class="form-check-label" for="total">Valor Total</label>
+       <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="opcao" id="antigas" value="antigas" onclick="refreshTable(event,'antigas')">
+        <label class="form-check-label" for="antigas">Antigas prmeiro</label>
       </div>
     </div>
     </form>
 
 
-    <table class="table table-striped">
+    <table id="tableVendas" name="tableVendas" class="table table-striped">
       <thead>
         <tr>
           <th>Código Venda</th>
@@ -29,7 +29,7 @@
           <th>Data</th>
         </tr>
       </thead>
-      <tbody>
+      <tbody id="tableBody" name="tableBody">
         <%
         var r = resultado.length;
 		    for(var i=0;i<r;i++)
@@ -61,7 +61,46 @@
       window.location.href = link;
     }
   </script>
- 
 
+  <!--ATUALIZA APENAS A TABELA , NAO RECARREGA A PAGINA INTEIRA-->
+  <script>
+  function refreshTable(event, opcao) {
+    // Capturando o valor do radio selecionado usando querySelector
+    var op = document.querySelector('input[name="opcao"]:checked').value;
+    console.log('opcao: '+op)
+
+    let url 
+    if ( opcao === 'antigas') {
+       url = '/venda/pesquisaRadioAntigas'
+    } else {
+      url = '/venda/historicoVendas'
+    }
     
-    <%- include('../footer'); %>
+    // Faz uma requisição AJAX para obter os dados atualizados da tabela
+    fetch(url)
+      .then(response => response.text())
+      .then(data => {
+        // Atualiza apenas o conteúdo da tabela
+        document.getElementById('tableBody').innerHTML = getTableBodyHtml(data);
+      })
+      .catch(error => {
+        console.error('Ocorreu um erro ao atualizar a tabela:', error);
+      });
+  }
+  </script>
+  
+  
+  <!--PEGA O ESTADO INICIAL DA TABELA -->
+  <script>
+  function getTableBodyHtml(data) {
+      // Parseia os dados HTML retornados pela requisição e extrai apenas o conteúdo da tabela
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(data, 'text/html');
+      const tableBody = doc.querySelector('#tableVendas tbody');
+    
+      // Retorna o conteúdo HTML da tabela
+      return tableBody.innerHTML;
+    }
+  
+  </script>
+<%- include('../footer'); %>
