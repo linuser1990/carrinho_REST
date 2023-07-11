@@ -1,7 +1,7 @@
 const pool = require('../db/db')
-const PDFDocument = require('pdfkit');
-const { exec } = require('shelljs');
-//const open = require('open');
+const PDFDocument = require('pdfkit')
+const { exec } = require('shelljs')
+// const open = require('open');
 // const ordem = "nome";
 
 // Listar todos os clientes
@@ -60,7 +60,7 @@ const updateCliente = async (req, res) => {
       res.status(404).json({ error: 'Cliente não encontrado' })
     }
   } catch (error) {
-    res.status(500).json({ error: 'Erro ao atualizar o cliente'})
+    res.status(500).json({ error: 'Erro ao atualizar o cliente' })
   }
 }
 
@@ -89,7 +89,9 @@ const showCreateView = async (req, res) => {
   }
 }
 
+// VERIFICA SE ESCOLHEU OPÇAO EXIBIR EM PDF OU NO NAVEGADOR
 const relClienteMaisComprouPeriodo = async (req, res) => {
+  const opcaoExibirResultado = req.body.opcao
   const startDate = req.body.startDate
   const endDate = req.body.endDate
 
@@ -106,71 +108,55 @@ const relClienteMaisComprouPeriodo = async (req, res) => {
   ' from venda inner join cliente on cliente.codcli = venda.cliente_codcli ' +
   " where data_venda BETWEEN TO_DATE('" + formattedDateStart + "','DD/MM/YYYY') and TO_DATE('" + formattedDateEnd + "','DD/MM/YYYY')group by(codvenda,venda.cliente_codcli,cliente.nome,cliente.codcli) order by total_comprou desc"
 
-  pool.query(sql, (error, results) => {
-    if (error) {
-      throw error
-    }
+  if (opcaoExibirResultado === 'pdf') {
+    const doc = new PDFDocument()
 
-    res.render('./reports/relClienteMaisComprouPeriodo', { varTitle: 'Sistema de Vendas - Resultado da Pesquisa', resultado: results.rows, datainicio: formattedDateStart, datafim: formattedDateEnd })
-  })
+    // Configura o cabeçalho do arquivo PDF
+    res.setHeader('Content-Disposition', 'attachment; filename="clientes.pdf"')
+    res.setHeader('Content-Type', 'application/pdf')
+
+    // Consulta os dados do banco de dados
+    try {
+      const result = await pool.query(sql)
+      const resultado = result.rows
+
+      // Gera o conteúdo do arquivo PDF
+      doc.fontSize(16).text('Clientes que mais Compraram por Periodo', { align: 'center' })
+      doc.moveDown()
+
+      resultado.forEach((cliente) => {
+        doc.fontSize(14).text(`Código do cliente: ${cliente.codcli}`)
+        doc.fontSize(14).text(`Nome: ${cliente.nome_cliente}`)
+        doc.fontSize(12).text(`Total: ${cliente.total_comprou}`)
+        doc.moveDown()
+      })
+
+      // Gera o arquivo PDF
+      doc.pipe(res)
+      doc.end()
+
+      // Abre o arquivo PDF ao final do processo
+      res.on('finish', () => {
+        exec('xdg-open clientes.pdf')
+      })
+    } catch (error) {
+      console.error('Erro ao consultar o banco de dados:', error)
+      res.status(500).send('Erro ao gerar o arquivo PDF')
+    }
+  } else {
+    pool.query(sql, (error, results) => {
+      if (error) {
+        throw error
+      }
+      res.render('./reports/relClienteMaisComprouPeriodo', { varTitle: 'Sistema de Vendas - Resultado da Pesquisa', resultado: results.rows, datainicio: formattedDateStart, datafim: formattedDateEnd })
+    })
+  }
 }
 
 const formClienteMaisComprou = async (req, res) => {
   res.render('./reports/formClienteMaisComprou')
 }
 
-const clienteMaisComprouPDF = async (req, res) => {
-  const startDate = req.body.startDate
-  const endDate = req.body.endDate
-
-  // FORMATA DATA QUE RECEBEU DOS CALENDARIOS ESCOLHIDO PELO USUARIO
-  const dateStringStart = startDate
-  const parts = dateStringStart.split('-')
-  const formattedDateStart = `${parts[2]}/${parts[1]}/${parts[0]}`
-
-  const dateStringEnd = endDate
-  const parts2 = dateStringEnd.split('-')
-  const formattedDateEnd = `${parts2[2]}/${parts2[1]}/${parts2[0]}`
-
-  const sql = 'select codvenda,cliente.codcli,sum(total) as total_comprou ,cliente.nome as nome_cliente ' +
-  ' from venda inner join cliente on cliente.codcli = venda.cliente_codcli ' +
-  " where data_venda BETWEEN TO_DATE('" + formattedDateStart + "','DD/MM/YYYY') and TO_DATE('" + formattedDateEnd + "','DD/MM/YYYY')group by(codvenda,venda.cliente_codcli,cliente.nome,cliente.codcli) order by total_comprou desc"
-
-  const doc = new PDFDocument();
-
-  // Configura o cabeçalho do arquivo PDF
-  res.setHeader('Content-Disposition', 'attachment; filename="clientes.pdf"');
-  res.setHeader('Content-Type', 'application/pdf');
-
-  // Consulta os dados do banco de dados
-  try {
-    const result = await pool.query(sql);
-    const resultado= result.rows;
-
-    // Gera o conteúdo do arquivo PDF
-    doc.fontSize(16).text('Clientes que mais Compraram por Periodo', { align: 'center' });
-    doc.moveDown();
-
-    resultado.forEach((cliente) => {
-      doc.fontSize(14).text(`Código do cliente: ${cliente.codcli}`);
-      doc.fontSize(14).text(`Nome: ${cliente.nome_cliente}`);
-      doc.fontSize(12).text(`Total: ${cliente.total_comprou}`);
-      doc.moveDown();
-    });
-
-    // Gera o arquivo PDF
-    doc.pipe(res);
-    doc.end();
-
-    // Abre o arquivo PDF ao final do processo
-    res.on('finish', () => {
-      exec('xdg-open clientes.pdf');
-    });
-  } catch (error) {
-    console.error('Erro ao consultar o banco de dados:', error);
-    res.status(500).send('Erro ao gerar o arquivo PDF');
-  }
-}
 
 const showFormClienteMaisComprouPeriodoPDF = async (rea, res) => {
   res.render('./reports/formClienteMaisComprouPeriodoPDF')
@@ -185,6 +171,5 @@ module.exports = {
   showCreateView,
   formClienteMaisComprou,
   relClienteMaisComprouPeriodo,
-  clienteMaisComprouPDF,
   showFormClienteMaisComprouPeriodoPDF
 }
