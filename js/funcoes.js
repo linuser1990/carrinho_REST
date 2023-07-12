@@ -1,5 +1,7 @@
 let totalgeral = 0.0
 
+var listaDeObjetos = []
+
 function cancelar () {
   window.location.href = '/clientes'
 }
@@ -100,8 +102,11 @@ function redirecionarParaCarrinho2 () {
   const subtotal = document.getElementById('subtotal').value // Obter o valor do campo de entrada 'qtd'
   const campototal = document.getElementById('total')
   const adicionarBtn = document.getElementById('adicionar')
-
   const alertaRepetido = document.getElementById('alertaRepetido')
+  
+  const selectProduto = document.getElementById('selectproduto')
+  var selectedIndex = selectProduto.selectedIndex;
+  var selectedOptionText = selectProduto.options[selectedIndex].text;
 
   // DESABILITA O SELECT CLIENTE AO INICIAR UMA VENDA PARA NAO MUDAR O CLIENTE NO MEIO DA VENDA
   const selectCliente = document.getElementById('selectcliente')
@@ -139,6 +144,55 @@ function redirecionarParaCarrinho2 () {
           adicionarBtn.classList.add('btn-secondary');
           adicionarBtn.textContent = 'Adicionar ao carrinho';
         }, 600);
+
+        adicionarObjeto(codpro,qtd,subtotal,selectedOptionText)
+
+        // LISTA DE ITENS ADICIONADOS, QUE APARECE NA TELA PRINCIPAL
+        function adicionarObjeto (codpro, qtd, subtotal,nome) {
+          const novoObjeto = {
+            codpro,
+            qtd,
+            subtotal,
+            nome
+          }
+
+          listaDeObjetos.push(novoObjeto)
+        }
+
+        
+          // Passo 1: Identificar a tabela
+          var tabela = document.getElementById("tableItens");
+
+          // Passo 2: Criar uma nova linha
+          var novaLinha = document.createElement("tr");
+
+          // Passo 3: Criar as células
+          var celula1 = document.createElement("td");
+          var celula2 = document.createElement("td");
+          var celula3 = document.createElement("td");
+          var celula4 = document.createElement("td");
+
+          // Passo 4: Adicionar conteúdo às células
+          celula1.textContent = codpro;
+          celula2.textContent = selectedOptionText;
+          celula3.textContent = qtd;
+          celula4.textContent = subtotal;
+
+          // Passo 5: Definir a largura da célula 2
+          celula1.style.width = "50px"; // Defina o valor desejado para a largura
+          celula2.style.width = "200px"; // Defina o valor desejado para a largura
+          celula3.style.width = "50px"; // Defina o valor desejado para a largura
+          celula4.style.width = "50px"; // Defina o valor desejado para a largura
+
+
+          // Passo 5: Anexar as células à linha
+          novaLinha.appendChild(celula1);
+          novaLinha.appendChild(celula2);
+          novaLinha.appendChild(celula3);
+          novaLinha.appendChild(celula4);
+
+          // Passo 6: Anexar a linha à tabela
+          tabela.appendChild(novaLinha);
 
       } else { 
         // EXIBE A MENSAGEM QUE JA FOI ADICIONADO O MESMO PRODUTO E ESCONDE A MENSAGEM APOS ALGUNS SEGUNDOS

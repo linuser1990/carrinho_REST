@@ -72,6 +72,17 @@ UTILIZA ESSES DOIS LINKS
       </div>
     <!--AO CLICAR EM ADICIONAR AO CARRINHO, CHAMA A FUNÇÃO EM JS QUE ARMAZENA OS VALUES DOS CAMPOS PARA A ROTA /addCarrinho -->
     <button onclick="redirecionarParaCarrinho2();" id="adicionar" name="adicionar" type="button" class="btn btn-block btn-secondary btn-with-image">Adicionar ao carrinho </button> 
+    
+    <a onclick="mostrarLista();" href="#" >Itens adicionados</a>
+
+    <div id="divLista" style="display: none;">
+      <br>
+      <table border="1" id="tableItens" >
+      
+      </table>
+      <br>
+    </div>
+    
 
     <div class="form-group">
         <label for="subtotal">Sub Total R$:</label>
@@ -138,5 +149,15 @@ UTILIZA ESSES DOIS LINKS
       });
     });
   });
+</script>
+
+<script>
+  function mostrarLista() {
+    console.log('entrou')
+    var divLista = document.getElementById('divLista')
+    //Mostra ou oculta ao clicar novamente
+    divLista.style.display = (divLista.style.display === 'none')? 'block' : 'none'
+  }
+
 </script>
 <%- include('../footer'); %>
