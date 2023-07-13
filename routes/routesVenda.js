@@ -2,6 +2,8 @@ const express = require('express')
 const routes = express.Router()
 const controllerVenda = require('../models/vendaModel')
 
+routes.get('/removeDoCarrinho',controllerVenda.removeDoCarrinho)
+routes.get('/testelista',controllerVenda.testeLista)
 routes.get('/pesquisaRadioAntigas',controllerVenda.pesquisaRadioAntigas)
 routes.get('/formMaioresVendasPeriodo',controllerVenda.formMaioresVendasPeriodo)
 routes.get('/formVendasPeriodo',controllerVenda.formVendasPeriodo)

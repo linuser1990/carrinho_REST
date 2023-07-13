@@ -1,6 +1,8 @@
 let totalgeral = 0.0
 
-var listaDeObjetos = []
+const listaDeObjetos = []
+
+let encontrou = 1 // não achou
 
 function cancelar () {
   window.location.href = '/clientes'
@@ -103,14 +105,68 @@ function redirecionarParaCarrinho2 () {
   const campototal = document.getElementById('total')
   const adicionarBtn = document.getElementById('adicionar')
   const alertaRepetido = document.getElementById('alertaRepetido')
-  
+
   const selectProduto = document.getElementById('selectproduto')
-  var selectedIndex = selectProduto.selectedIndex;
-  var selectedOptionText = selectProduto.options[selectedIndex].text;
+  const selectedIndex = selectProduto.selectedIndex
+  const selectedOptionText = selectProduto.options[selectedIndex].text
 
   // DESABILITA O SELECT CLIENTE AO INICIAR UMA VENDA PARA NAO MUDAR O CLIENTE NO MEIO DA VENDA
   const selectCliente = document.getElementById('selectcliente')
   selectCliente.disabled = true
+
+  // VERIFICA SE JA TEM O MESMO PRODUTO ADICIONADO
+  for (let i = 0; i < listaDeObjetos.length; i++) {
+    if (listaDeObjetos[i].nome === selectedOptionText) {
+      console.log('achou')
+      encontrou = 2
+      break
+    } else {
+      encontrou = 1
+    }
+  }
+
+  // SE NÃO ACHOU
+  if (encontrou === 1) {
+    // soma o subtotal a cada produto adicionado ao carrinho
+    totalgeral = totalgeral + parseFloat(subtotal)
+
+    // preenche o campo total com a soma dos subtotal
+    // A VARIAVEL totalgeral É ZERADA TODA VEZ QUE INICIA UMA NOVA VENDA
+    // PORQUE ELA PEGA O VALOR 0 PREENCHIDO POR PADRAO NO CAMPO TOTAL
+    campototal.value = parseFloat(totalgeral)
+
+    // ALTERA O BOTAO ADICIONAR E VOLTA AO ESTADO INICIAL APÓS O TEMPO DETERMINADO
+    adicionarBtn.classList.remove('btn-light')
+    adicionarBtn.classList.add('btn-success')
+    adicionarBtn.textContent = 'ADICIONADO COM SUCESSO'
+    setTimeout(function () {
+      adicionarBtn.classList.remove('btn-success')
+      adicionarBtn.classList.add('btn-secondary')
+      adicionarBtn.textContent = 'Adicionar ao carrinho'
+    }, 600)
+
+    adicionarObjeto(codpro, qtd, subtotal, selectedOptionText)
+
+    // LISTA DE ITENS ADICIONADOS, QUE APARECE NA TELA PRINCIPAL
+    function adicionarObjeto (codpro, qtd, subtotal, nome) {
+      const novoObjeto = {
+        codpro,
+        qtd,
+        subtotal,
+        nome
+      }
+
+      listaDeObjetos.push(novoObjeto)
+      // Atualiza a lista exibida na página
+      atualizarLista()
+    }
+  } else {
+    // EXIBE A MENSAGEM QUE JA FOI ADICIONADO O MESMO PRODUTO E ESCONDE A MENSAGEM APOS ALGUNS SEGUNDOS
+    alertaRepetido.style.display = 'block'
+    setTimeout(function () {
+      alertaRepetido.style.display = 'none'
+    }, 2000)
+  }
 
   $.ajax({
     url: '/venda/addCarrinho',
@@ -122,90 +178,65 @@ function redirecionarParaCarrinho2 () {
       subtotal
     },
     success: function (response) {
-      // POSSO RETORNAR ALGUMA VARIAVEL DA ROTA '/addCarrinho' Nesse caso foi a variavel 'mensagem'
-      console.log(response.mensagem) // Optional: Display a success message
-      // VERIFICA SE JA TEM O MESMO PRODUTO ADICIONADO
-      // SE NÃO ACHOU
-      if (response.encontrou == 1) {
-        // soma o subtotal a cada produto adicionado ao carrinho
-        totalgeral = totalgeral + parseFloat(subtotal)
-
-        // preenche o campo total com a soma dos subtotal
-        // A VARIAVEL totalgeral É ZERADA TODA VEZ QUE INICIA UMA NOVA VENDA
-        // PORQUE ELA PEGA O VALOR 0 PREENCHIDO POR PADRAO NO CAMPO TOTAL
-        campototal.value = parseFloat(totalgeral)
-
-        // ALTERA O BOTAO ADICIONAR E VOLTA AO ESTADO INICIAL APÓS O TEMPO DETERMINADO
-        adicionarBtn.classList.remove('btn-light');
-        adicionarBtn.classList.add('btn-success');
-        adicionarBtn.textContent = 'ADICIONADO COM SUCESSO';
-        setTimeout(function() {
-          adicionarBtn.classList.remove('btn-success');
-          adicionarBtn.classList.add('btn-secondary');
-          adicionarBtn.textContent = 'Adicionar ao carrinho';
-        }, 600);
-
-        adicionarObjeto(codpro,qtd,subtotal,selectedOptionText)
-
-        // LISTA DE ITENS ADICIONADOS, QUE APARECE NA TELA PRINCIPAL
-        function adicionarObjeto (codpro, qtd, subtotal,nome) {
-          const novoObjeto = {
-            codpro,
-            qtd,
-            subtotal,
-            nome
-          }
-
-          listaDeObjetos.push(novoObjeto)
-        }
-
-        
-          // Passo 1: Identificar a tabela
-          var tabela = document.getElementById("tableItens");
-
-          // Passo 2: Criar uma nova linha
-          var novaLinha = document.createElement("tr");
-
-          // Passo 3: Criar as células
-          var celula1 = document.createElement("td");
-          var celula2 = document.createElement("td");
-          var celula3 = document.createElement("td");
-          var celula4 = document.createElement("td");
-
-          // Passo 4: Adicionar conteúdo às células
-          celula1.textContent = codpro;
-          celula2.textContent = selectedOptionText;
-          celula3.textContent = qtd;
-          celula4.textContent = subtotal;
-
-          // Passo 5: Definir a largura da célula 2
-          celula1.style.width = "50px"; // Defina o valor desejado para a largura
-          celula2.style.width = "200px"; // Defina o valor desejado para a largura
-          celula3.style.width = "50px"; // Defina o valor desejado para a largura
-          celula4.style.width = "50px"; // Defina o valor desejado para a largura
-
-
-          // Passo 5: Anexar as células à linha
-          novaLinha.appendChild(celula1);
-          novaLinha.appendChild(celula2);
-          novaLinha.appendChild(celula3);
-          novaLinha.appendChild(celula4);
-
-          // Passo 6: Anexar a linha à tabela
-          tabela.appendChild(novaLinha);
-
-      } else { 
-        // EXIBE A MENSAGEM QUE JA FOI ADICIONADO O MESMO PRODUTO E ESCONDE A MENSAGEM APOS ALGUNS SEGUNDOS
-        alertaRepetido.style.display = 'block'
-        setTimeout(function () {
-          alertaRepetido.style.display = 'none'
-        }, 2000)
-      }
     },
     error: function (error) {
       console.error('An error occurred while adding to the cart.') // Optional: Display an error message
     }
   })
+}
+
+function removerObjeto (index, event) {
+  event.preventDefault();
+
+  const campototal = document.getElementById('total')
+  var sub = listaDeObjetos[index].subtotal;
+
+  // descrementa total geral
+  totalgeral -= sub;
+
+  campototal.value = parseFloat(totalgeral)
+
+  // Remove o objeto do array pelo índice fornecido
+  listaDeObjetos.splice(index, 1)
+
+  // REMOVE TAMBEM NA ROTA
+  $.ajax({
+    url: '/venda/removeDoCarrinho',
+    type: 'GET',
+    data: {
+      index,
+      sub
+    },
+    success: function (response) {
+    },
+    error: function (error) {
+      console.error('An error occurred while adding to the cart.') // Optional: Display an error message
+    }
+  })
+
+  // Atualiza a lista exibida na página
+  atualizarLista()
+}
+
+function atualizarLista () {
+  // Obtém o elemento ul onde os objetos serão exibidos
+  const lista = document.getElementById('listaObjetos')
+  lista.innerHTML = ''
+
+  // Percorre o array e cria elementos li para cada objeto
+  for (let i = 0; i < listaDeObjetos.length; i++) {
+    const objeto = listaDeObjetos[i]
+
+    const li = document.createElement('li')
+    li.appendChild(document.createTextNode('Código: ' + objeto.codpro + ', Quantidade: ' + objeto.qtd + ', Subtotal: ' + objeto.subtotal + ', Nome: ' + objeto.nome))
+
+    const button = document.createElement('button')
+    button.appendChild(document.createTextNode('Excluir'))
+    button.setAttribute("onclick", "removerObjeto(" + i + ", event)")
+
+    li.appendChild(button)
+    lista.appendChild(li)
+  }
 }
 
 function mostrarTexto () {
@@ -219,4 +250,5 @@ function mostrarTexto () {
 // ZERA A VARIAVEL TOTALGERAL
 function limparCampo () {
   totalgeral = 0
+  encontrou = 1
 }

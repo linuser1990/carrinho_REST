@@ -32,19 +32,24 @@ const estoqueAtual = async (req, res) => {
   res.send(rows[0])
 }
 
+const testeLista = async (req, res) => {
+  res.render('./venda/teste')
+}
+
 const addCarrinho = async (req, res) => {
   try {
+    
     // recebe os parametros da URL
     const codproduto = req.query.codpro
     const quantidade = req.query.qtd
     const stotal = req.query.subtotal
 
     // Função para adicionar um novo objeto ao array
-    function adicionarObjeto (codpro, qtd, subtotal) {
+    function adicionarObjeto (codpro, qtd, subtotal,nome) {
       const novoObjeto = {
         codpro,
         qtd,
-        subtotal
+        subtotal,nome
       }
 
       listaDeObjetos.push(novoObjeto)
@@ -108,6 +113,17 @@ const inserirvendacarrinho = async (req, res) => {
   } catch (error) {
     console.log(error)
   }
+}
+
+const removeDoCarrinho = async (req, res) => {
+  const index = req.query.index
+  const sub = req.query.sub
+
+  // Remove o objeto do array pelo índice fornecido
+  listaDeObjetos.splice(index, 1)
+
+  //Atualiza o Total da venda
+  total -= sub
 }
 
 const historicoVendas = async (req, res) => {
@@ -272,5 +288,7 @@ module.exports = {
   relVendasPeriodo,
   formMaioresVendasPeriodo,
   relMaioresVendasPeriodo,
-  pesquisaRadioAntigas
+  pesquisaRadioAntigas,
+  testeLista,
+  removeDoCarrinho
 }
