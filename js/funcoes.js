@@ -220,23 +220,54 @@ function removerObjeto (index, event) {
 }
 
 function atualizarLista () {
-  // Obtém o elemento ul onde os objetos serão exibidos
-  const lista = document.getElementById('listaObjetos')
-  lista.innerHTML = ''
+  var tabela = document.getElementById("tabelaProdutos");
+  tabela.innerHTML = "";
 
-  // Percorre o array e cria elementos li para cada objeto
-  for (let i = 0; i < listaDeObjetos.length; i++) {
-    const objeto = listaDeObjetos[i]
+  var cabecalho = tabela.createTHead();
+  var row = cabecalho.insertRow();
+  var colCodigo = document.createElement("th");
+  colCodigo.innerHTML = "Código";
+  row.appendChild(colCodigo);
 
-    const li = document.createElement('li')
-    li.appendChild(document.createTextNode('Código: ' + objeto.codpro + ', Quantidade: ' + objeto.qtd + ', Subtotal: ' + objeto.subtotal + ', Nome: ' + objeto.nome))
+  var colNome = document.createElement("th");
+  colNome.style.width = "300px";
+  colNome.innerHTML = "Nome";
+  row.appendChild(colNome);
 
+  var colQuantidade = document.createElement("th");
+  colQuantidade.innerHTML = "Quantidade";
+  row.appendChild(colQuantidade);
+
+  var colSubtotal = document.createElement("th");
+  colSubtotal.innerHTML = "Subtotal";
+  row.appendChild(colSubtotal);
+
+  var colAcao = document.createElement("th");
+  colAcao.innerHTML = "";
+  row.appendChild(colAcao);
+
+  var corpoTabela = tabela.createTBody();
+  for (var i = 0; i < listaDeObjetos.length; i++) {
+    var produto = listaDeObjetos[i];
+    var row = corpoTabela.insertRow();
+
+    var codigoCell = row.insertCell();
+    codigoCell.innerHTML = produto.codpro;
+
+    var nomeCell = row.insertCell();
+    nomeCell.innerHTML = produto.nome;
+
+    var quantidadeCell = row.insertCell();
+    quantidadeCell.innerHTML = produto.qtd;
+
+    var subtotalCell = row.insertCell();
+    subtotalCell.innerHTML = produto.subtotal;
+
+    var acaoCell = row.insertCell();
     const button = document.createElement('button')
     button.appendChild(document.createTextNode('Excluir'))
     button.setAttribute('onclick', 'removerObjeto(' + i + ', event)')
-
-    li.appendChild(button)
-    lista.appendChild(li)
+    acaoCell.appendChild(button);
   }
 }
 

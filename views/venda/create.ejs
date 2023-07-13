@@ -27,8 +27,35 @@ UTILIZA ESSES DOIS LINKS
       color: #fff;
       text-align: center;
     }
-  </style>
+</style>
 
+<style>
+    #listaObjetos li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  #listaObjetos li button {
+    width: 80px;
+  }
+</style>
+
+<style>
+  table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+
+  th, td {
+    border: 1px solid black;
+    padding: 8px;
+  }
+
+  th:nth-child(2) {
+    width: 200px;
+  }
+</style>
 
 <form id="form" name="form" method="post" action="/venda/inserirvendacarrinho" class="form">
 
@@ -76,9 +103,15 @@ UTILIZA ESSES DOIS LINKS
     <a onclick="mostrarLista();" href="#" >Itens adicionados</a>
     
     <div id="divLista" style="display: none;">
-      <br>
-      <ul id="listaObjetos"></ul>
-      <br>
+      <table id="tabelaProdutos">
+        <tr>
+          <th>Código</th>
+          <th style="width: 300px;">Nome</th>
+          <th>Quantidade</th>
+          <th>Subtotal</th>
+          <th></th>
+        </tr>
+      </table>
     </div>
     
 

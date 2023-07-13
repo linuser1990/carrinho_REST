@@ -102,6 +102,8 @@ const removeDoCarrinho = async (req, res) => {
 
   //Atualiza o Total da venda
   total -= sub
+
+  res.json({ mensagem: 'REMOVIDO COM SUCESSO'})
 }
 
 const historicoVendas = async (req, res) => {
