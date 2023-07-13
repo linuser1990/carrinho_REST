@@ -157,6 +157,23 @@ function redirecionarParaCarrinho2 () {
       }
 
       listaDeObjetos.push(novoObjeto)
+
+      $.ajax({
+        url: '/venda/addCarrinho',
+        type: 'GET',
+        data: {
+          codcli,
+          codpro,
+          qtd,
+          subtotal
+        },
+        success: function (response) {
+        },
+        error: function (error) {
+          console.error('An error occurred while adding to the cart.') // Optional: Display an error message
+        }
+      })
+
       // Atualiza a lista exibida na página
       atualizarLista()
     }
@@ -167,32 +184,16 @@ function redirecionarParaCarrinho2 () {
       alertaRepetido.style.display = 'none'
     }, 2000)
   }
-
-  $.ajax({
-    url: '/venda/addCarrinho',
-    type: 'GET',
-    data: {
-      codcli,
-      codpro,
-      qtd,
-      subtotal
-    },
-    success: function (response) {
-    },
-    error: function (error) {
-      console.error('An error occurred while adding to the cart.') // Optional: Display an error message
-    }
-  })
 }
 
 function removerObjeto (index, event) {
-  event.preventDefault();
+  event.preventDefault()
 
   const campototal = document.getElementById('total')
-  var sub = listaDeObjetos[index].subtotal;
+  const sub = listaDeObjetos[index].subtotal
 
   // descrementa total geral
-  totalgeral -= sub;
+  totalgeral -= sub
 
   campototal.value = parseFloat(totalgeral)
 
@@ -232,7 +233,7 @@ function atualizarLista () {
 
     const button = document.createElement('button')
     button.appendChild(document.createTextNode('Excluir'))
-    button.setAttribute("onclick", "removerObjeto(" + i + ", event)")
+    button.setAttribute('onclick', 'removerObjeto(' + i + ', event)')
 
     li.appendChild(button)
     lista.appendChild(li)

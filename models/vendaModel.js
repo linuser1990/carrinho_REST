@@ -53,37 +53,15 @@ const addCarrinho = async (req, res) => {
       }
 
       listaDeObjetos.push(novoObjeto)
-    }
+    }    
 
-    // VARRE A LISTA PRA VER SE JA FOI ADICIONADO O PRODUTO
-    for (let i = 0; i < listaDeObjetos.length; i++) {
-      const objeto = listaDeObjetos[i]
-
-      /// VERIFICA SE ACHOU O PRODUTO NA LISTA
-      var achou = 1
-
-      if (codproduto === objeto.codpro) {
-        // 2 = ENCONTROU
-        achou = 2
-        res.json({ mensagem: 'PRODUTO JA ADICIONADO', encontrou: 2 })
-        break
-      }
-    }
-
-    if (achou === 2) {
-      // console.log('achou');
-
-    } else {
-      // console.log('nao achou');
-
-      // ADICIONA NA LISTA
       adicionarObjeto(codproduto, quantidade, stotal)
 
       // SOMA O SUBTOTAL E ARMAZENA O TOTAL GERAL DA VENDA NA VARIAVEL TOTAL
       total = total + parseFloat(stotal)
 
       res.json({ mensagem: 'PRODUTO NAO ADICIONADO', encontrou: 1 })
-    }
+    
   } catch (error) {
     console.log(error)
   }
