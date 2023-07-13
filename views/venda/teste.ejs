@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Lista de Itens</title>
+  <script>
+    // Cria um array para armazenar os objetos selecionados
+    var listaDeObjetos = [];
+
+    function adicionarObjeto(codpro, qtd, subtotal, nome) {
+      const novoObjeto = {
+        codpro,
+        qtd,
+        subtotal,
+        nome
+      };
+
+      listaDeObjetos.push(novoObjeto);
+
+      // Atualiza a lista exibida na página
+      atualizarLista();
+    }
+
+    function removerObjeto(index) {
+      // Remove o objeto do array pelo índice fornecido
+      listaDeObjetos.splice(index, 1);
+
+      // Atualiza a lista exibida na página
+      atualizarLista();
+    }
+
+    function atualizarLista() {
+      // Obtém o elemento ul onde os objetos serão exibidos
+      var lista = document.getElementById("listaObjetos");
+      lista.innerHTML = "";
+
+      // Percorre o array e cria elementos li para cada objeto
+      for (var i = 0; i < listaDeObjetos.length; i++) {
+        var objeto = listaDeObjetos[i];
+
+        var li = document.createElement("li");
+        li.appendChild(document.createTextNode("Código: " + objeto.codpro + ", Quantidade: " + objeto.qtd + ", Subtotal: " + objeto.subtotal + ", Nome: " + objeto.nome));
+
+        var button = document.createElement("button");
+        button.appendChild(document.createTextNode("Excluir"));
+        button.setAttribute("onclick", "removerObjeto(" + i + ")");
+
+        li.appendChild(button);
+        lista.appendChild(li);
+      }
+    }
+  </script>
+</head>
+<body>
+  <h1>Lista de Objetos</h1>
+  <button onclick="adicionarObjeto('001', 2, 20.00, 'Objeto 1')">Adicionar Objeto 1</button>
+  <button onclick="adicionarObjeto('002', 3, 30.00, 'Objeto 2')">Adicionar Objeto 2</button>
+  <button onclick="adicionarObjeto('003', 4, 40.00, 'Objeto 3')">Adicionar Objeto 3</button>
+  <ul id="listaObjetos"></ul>
+</body>
+</html>
