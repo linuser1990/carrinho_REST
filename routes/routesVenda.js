@@ -2,6 +2,7 @@ const express = require('express')
 const routes = express.Router()
 const controllerVenda = require('../models/vendaModel')
 
+routes.get('/verificaPrecoVenda',controllerVenda.verificaPrecoVenda)
 routes.get('/removeDoCarrinho',controllerVenda.removeDoCarrinho)
 routes.get('/testelista',controllerVenda.testeLista)
 routes.get('/pesquisaRadioAntigas',controllerVenda.pesquisaRadioAntigas)

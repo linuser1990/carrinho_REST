@@ -254,6 +254,33 @@ const pesquisaRadioAntigas = async (req, res) => {
   res.render('./venda/index', { resultado: rows })
 }
 
+const verificaPrecoVenda = async (req, res) => {
+  try {
+    const codpro = req.query.codpro
+    const operacao = req.query.operacao
+    const index = req.query.index
+   
+    const {rows} = await pool.query('SELECT precovenda FROM produto WHERE codpro = $1',[codpro])
+    
+    if (operacao === 'adicionar') {
+      total += parseFloat(rows[0].precovenda)
+      listaDeObjetos[index].subtotal =parseFloat(listaDeObjetos[index].subtotal ) + parseFloat(rows[0].precovenda)
+      listaDeObjetos[index].qtd = parseInt(listaDeObjetos[index].qtd) + 1
+      console.log('total '+total)
+      console.log('listaDeObjetos[index].subtotal '+listaDeObjetos[index].subtotal)
+    } else {
+      total -= parseFloat(rows[0].precovenda)
+      listaDeObjetos[index].subtotal =parseFloat(listaDeObjetos[index].subtotal ) -  parseFloat(rows[0].precovenda)
+      listaDeObjetos[index].qtd = parseInt(listaDeObjetos[index].qtd) - 1
+      console.log('total '+total)
+      console.log('listaDeObjetos[index].subtotal '+parseFloat(listaDeObjetos[index].subtotal))
+    }
+    res.send(rows[0])
+  } catch (error) {
+    console.log(error)
+  }  
+}
+
 module.exports = {
   showVendaView,
   verificaEstoque,
@@ -269,5 +296,6 @@ module.exports = {
   relMaioresVendasPeriodo,
   pesquisaRadioAntigas,
   testeLista,
-  removeDoCarrinho
+  removeDoCarrinho,
+  verificaPrecoVenda
 }
