@@ -1,123 +1,194 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
     <title>Gerenciamento de Vendas</title>
     <!-- Adicionando o CSS do Bootstrap -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-</head>
-<body>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    />
+  </head>
+  <body>
+    <style>
+      .navbar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1000;
+      }
+      body {
+        padding-top: 80px; /* Altura da navbar */
+      }
+    </style>
 
-  <style>
-    .navbar {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 1000;
-    }
-    body {
-      padding-top: 80px; /* Altura da navbar */
-    }
-  </style>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <a class="navbar-brand" href="/home">INICIO</a>
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-toggle="collapse"
+        data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
 
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="/home">INICIO</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-  
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav mr-auto">
-        
-         <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="/clientes" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            CLIENTES
-          </a>
-          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item" href="/clientes">LISTA DE CLIENTES</a>
-            <a class="dropdown-item" href="/add">CADASTRAR CLIENTE</a>
-          </div>
-        </li>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item dropdown">
+            <a
+              class="nav-link dropdown-toggle"
+              href="/clientes"
+              id="navbarDropdown"
+              role="button"
+              data-toggle="dropdown"
+              aria-haspopup="true"
+              aria-expanded="false"
+            >
+              CLIENTES
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <a class="dropdown-item" href="/clientes">LISTA DE CLIENTES</a>
+              <a class="dropdown-item" href="/add">CADASTRAR CLIENTE</a>
+            </div>
+          </li>
 
-        <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <li class="nav-item dropdown">
+            <a
+              class="nav-link dropdown-toggle"
+              href="#"
+              id="navbarDropdown"
+              role="button"
+              data-toggle="dropdown"
+              aria-haspopup="true"
+              aria-expanded="false"
+            >
               PRODUTOS
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
               <a class="dropdown-item" href="/produtos">LISTA DE PRODUTOS</a>
-              <a class="dropdown-item" href="/addProdutos">CADASTRAR PRODUTOS</a>
+              <a class="dropdown-item" href="/addProdutos"
+                >CADASTRAR PRODUTOS</a
+              >
             </div>
           </li>
 
           <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <a
+              class="nav-link dropdown-toggle"
+              href="#"
+              id="navbarDropdown"
+              role="button"
+              data-toggle="dropdown"
+              aria-haspopup="true"
+              aria-expanded="false"
+            >
               VENDAS
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
               <a class="dropdown-item" href="/venda">VENDER</a>
-              <a class="dropdown-item" href="/venda_carrinho">VENDER-CARRINHO</a>
-              <a class="dropdown-item" href="/historico_vendas">HISTÓRICO DE VENDAS</a>
+              <a class="dropdown-item" href="/venda_carrinho"
+                >VENDER-CARRINHO</a
+              >
+              <a class="dropdown-item" href="/historico_vendas"
+                >HISTÓRICO DE VENDAS</a
+              >
             </div>
           </li>
 
           <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <a
+              class="nav-link dropdown-toggle"
+              href="#"
+              id="navbarDropdown"
+              role="button"
+              data-toggle="dropdown"
+              aria-haspopup="true"
+              aria-expanded="false"
+            >
               RELATÓRIOS
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
               <a class="dropdown-item" href="/relvendas">REL. VENDAS</a>
-              <a class="dropdown-item" href="/rel_cliente_mais_comprou">REL. CLIENTE MAIS COMPROU</a>
+              <a class="dropdown-item" href="/rel_cliente_mais_comprou"
+                >REL. CLIENTE MAIS COMPROU</a
+              >
             </div>
-
-            
           </li>
 
-        <li class="nav-item">
-          <a class="nav-link" href="/teste">TESTE</a>
-        </li>
-      </ul>
-      <form class="form-inline my-2 my-lg-0">
-        <input class="form-control mr-sm-2" type="search" placeholder="Pesquisar" aria-label="Search">
-        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Pesquisar</button>
-      </form>
-    </div>
-  </nav>
-
-
-  <div class="container-fluid">
-    <div class="row">
-      <div class="col-xs-6 col-sm-3">
-        <a href="/clientes">
-          <img title="Clientes" src="/imagens/clientes.png" width="50" height="50">CLIENTES
-        </a>
-      
+          <li class="nav-item">
+            <a class="nav-link" href="/teste">TESTE</a>
+          </li>
+        </ul>
+        <form class="form-inline my-2 my-lg-0">
+          <input
+            class="form-control mr-sm-2"
+            type="search"
+            placeholder="Pesquisar"
+            aria-label="Search"
+          />
+          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">
+            Pesquisar
+          </button>
+        </form>
       </div>
+    </nav>
 
-      <div class="col-xs-6 col-sm-3">
-      
-        <a href="/clientes/create">
-          <img title="Cadastro de Clientes" src="/imagens/cadastro.png" width="50" height="50">CAD. CLIENTES
-        </a>
-      </div>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-xs-6 col-sm-3">
+          <a href="/clientes">
+            <img
+              title="Clientes"
+              src="/imagens/clientes.png"
+              width="50"
+              height="50"
+            />CLIENTES
+          </a>
+        </div>
 
+        <div class="col-xs-6 col-sm-3">
+          <a href="/clientes/create">
+            <img
+              title="Cadastro de Clientes"
+              src="/imagens/cadastro.png"
+              width="50"
+              height="50"
+            />CAD. CLIENTES
+          </a>
+        </div>
 
-      <div class="col-xs-6 col-sm-3">
-        
-        <a href="/produtos">
-          <img title="Produtos" src="./imagens/prateleira.png" width="50" height="50">PRODUTOS
-        </a>
-      </div>
+        <div class="col-xs-6 col-sm-3">
+          <a href="/produtos">
+            <img
+              title="Produtos"
+              src="./imagens/prateleira.png"
+              width="50"
+              height="50"
+            />PRODUTOS
+          </a>
+        </div>
 
-      <div class="col-xs-6 col-sm-3">
-        
-        <a href="/produtos/create">
-          <img title="Cadastro de Produtos" src="./imagens/cadastro_produto.png" width="50" height="50">CAD.PRODUTOS
-        </a>
-      </div>
-    
-      <!--CODIGO ANTIGO
+        <div class="col-xs-6 col-sm-3">
+          <a href="/produtos/create">
+            <img
+              title="Cadastro de Produtos"
+              src="./imagens/cadastro_produto.png"
+              width="50"
+              height="50"
+            />CAD.PRODUTOS
+          </a>
+        </div>
+
+        <!--CODIGO ANTIGO
       <div class="col-xs-6 col-sm-3">
         <a href="/venda">
           <img  title="Venda" src="./imagens/mais-vendidos.png" width="50" height="50">VENDA
@@ -137,50 +208,79 @@
       </div>
       -->
 
-      <div class="col-xs-6 col-sm-3">
-        <a href="/venda/formMaioresVendasPeriodo">
-          <img  title="Venda" src="./imagens/crescimento.png" width="50" height="50">REL. MAIORES VENDAS PERIODO - EXIBE PDF 
-        </a>
-      </div>
+        <div class="col-xs-6 col-sm-3">
+          <a href="/venda/formMaioresVendasPeriodo">
+            <img
+              title="Venda"
+              src="./imagens/crescimento.png"
+              width="50"
+              height="50"
+            />REL. MAIORES VENDAS PERIODO - EXIBE PDF
+          </a>
+        </div>
 
-      <div class="col-xs-6 col-sm-3">
-        <a href="/venda">
-          <img  title="Venda" src="./imagens/carrinho.png" width="50" height="50">VENDA-CARRINHO
-        </a>
-      </div>
+        <div class="col-xs-6 col-sm-3">
+          <a href="/venda">
+            <img
+              title="Venda"
+              src="./imagens/carrinho.png"
+              width="50"
+              height="50"
+            />VENDA-CARRINHO
+          </a>
+        </div>
 
-      <div class="col-xs-6 col-sm-3">
-        <a href="/venda/historicoVendas" target="_self">
-          <img  title="Venda" src="./imagens/historico_carrinho.png" width="50" height="50">HISTORICO-VENDA-CARRINHO
-        </a>
-      </div>
+        <div class="col-xs-6 col-sm-3">
+          <a href="/venda/historicoVendas" target="_self">
+            <img
+              title="Venda"
+              src="./imagens/historico_carrinho.png"
+              width="50"
+              height="50"
+            />HISTORICO-VENDA-CARRINHO
+          </a>
+        </div>
 
-      <div class="col-xs-6 col-sm-3">
-        <a href="/venda/detalhesTodasVendas">
-          <img  title="Venda" src="./imagens/lista_compras.png" width="50" height="50">DETALHES TODAS AS VENDAS
-        </a>
-      </div>
+        <div class="col-xs-6 col-sm-3">
+          <a href="/venda/detalhesTodasVendas">
+            <img
+              title="Venda"
+              src="./imagens/lista_compras.png"
+              width="50"
+              height="50"
+            />DETALHES TODAS AS VENDAS
+          </a>
+        </div>
 
-      <div class="col-xs-6 col-sm-3">
-        <a href="/venda/formVendasPeriodo">
-          <img  title="Venda" src="./imagens/calendario.png" width="50" height="50">HISTORICO VENDAS CARRINHO - PERIODO
-        </a>
-      </div>
+        <div class="col-xs-6 col-sm-3">
+          <a href="/venda/formVendasPeriodo">
+            <img
+              title="Venda"
+              src="./imagens/calendario.png"
+              width="50"
+              height="50"
+            />HISTORICO VENDAS CARRINHO - PERIODO
+          </a>
+        </div>
 
-      <div class="col-xs-6 col-sm-3">
-        <a href="/clientes/formClienteMaisComprou">
-          <img  title="Venda" src="./imagens/cliente_mais_comprou.png" width="50" height="50">REL. CLIENTES MAIS COMPRARAM POR PERIODO - EXIBE PDF 
-        </a>
+        <div class="col-xs-6 col-sm-3">
+          <a href="/clientes/formClienteMaisComprou">
+            <img
+              title="Venda"
+              src="./imagens/cliente_mais_comprou.png"
+              width="50"
+              height="50"
+            />REL. CLIENTES MAIS COMPRARAM POR PERIODO - EXIBE PDF
+          </a>
+        </div>
+        <br />
+        <a href="/venda/testelista">TESTE LISTA</a>
       </div>
-      <br>
-      <a href="/venda/testelista">TESTE LISTA</a>
-
     </div>
-  </div>
 
     <!-- Adicionando o JS do Bootstrap -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-</body>
+  </body>
 </html>

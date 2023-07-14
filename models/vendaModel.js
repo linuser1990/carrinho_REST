@@ -8,8 +8,8 @@ let total = 0.0
 
 const showVendaView = async (req, res) => {
   try {
-    const rowsCli = await pool.query('SELECT * FROM cliente')
-    const rowsPro = await pool.query('SELECT * FROM produto')
+    const rowsCli = await pool.query('SELECT * FROM cliente ORDER BY nome')
+    const rowsPro = await pool.query('SELECT * FROM produto ORDER BY nome')
     res.render('./venda/create', { clientes: rowsCli.rows, produtos: rowsPro.rows })
   } catch (error) {
     console.log(error)
@@ -38,30 +38,29 @@ const testeLista = async (req, res) => {
 
 const addCarrinho = async (req, res) => {
   try {
-    
     // recebe os parametros da URL
     const codproduto = req.query.codpro
     const quantidade = req.query.qtd
     const stotal = req.query.subtotal
 
     // Função para adicionar um novo objeto ao array
-    function adicionarObjeto (codpro, qtd, subtotal,nome) {
+    function adicionarObjeto (codpro, qtd, subtotal, nome) {
       const novoObjeto = {
         codpro,
         qtd,
-        subtotal,nome
+        subtotal,
+        nome
       }
 
       listaDeObjetos.push(novoObjeto)
-    }    
+    }
 
-      adicionarObjeto(codproduto, quantidade, stotal)
+    adicionarObjeto(codproduto, quantidade, stotal)
 
-      // SOMA O SUBTOTAL E ARMAZENA O TOTAL GERAL DA VENDA NA VARIAVEL TOTAL
-      total = total + parseFloat(stotal)
+    // SOMA O SUBTOTAL E ARMAZENA O TOTAL GERAL DA VENDA NA VARIAVEL TOTAL
+    total = total + parseFloat(stotal)
 
-      res.json({ mensagem: 'PRODUTO NAO ADICIONADO', encontrou: 1 })
-    
+    res.json({ mensagem: 'PRODUTO NAO ADICIONADO', encontrou: 1 })
   } catch (error) {
     console.log(error)
   }
@@ -100,10 +99,10 @@ const removeDoCarrinho = async (req, res) => {
   // Remove o objeto do array pelo índice fornecido
   listaDeObjetos.splice(index, 1)
 
-  //Atualiza o Total da venda
+  // Atualiza o Total da venda
   total -= sub
 
-  res.json({ mensagem: 'REMOVIDO COM SUCESSO'})
+  res.json({ mensagem: 'REMOVIDO COM SUCESSO' })
 }
 
 const historicoVendas = async (req, res) => {

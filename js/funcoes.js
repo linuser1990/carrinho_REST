@@ -220,54 +220,54 @@ function removerObjeto (index, event) {
 }
 
 function atualizarLista () {
-  var tabela = document.getElementById("tabelaProdutos");
-  tabela.innerHTML = "";
+  const tabela = document.getElementById('tabelaProdutos')
+  tabela.innerHTML = ''
 
-  var cabecalho = tabela.createTHead();
-  var row = cabecalho.insertRow();
-  var colCodigo = document.createElement("th");
-  colCodigo.innerHTML = "Código";
-  row.appendChild(colCodigo);
+  const cabecalho = tabela.createTHead()
+  var row = cabecalho.insertRow()
+  const colCodigo = document.createElement('th')
+  colCodigo.innerHTML = 'Código'
+  row.appendChild(colCodigo)
 
-  var colNome = document.createElement("th");
-  colNome.style.width = "300px";
-  colNome.innerHTML = "Nome";
-  row.appendChild(colNome);
+  const colNome = document.createElement('th')
+  colNome.style.width = '300px'
+  colNome.innerHTML = 'Nome'
+  row.appendChild(colNome)
 
-  var colQuantidade = document.createElement("th");
-  colQuantidade.innerHTML = "Quantidade";
-  row.appendChild(colQuantidade);
+  const colQuantidade = document.createElement('th')
+  colQuantidade.innerHTML = 'Quantidade'
+  row.appendChild(colQuantidade)
 
-  var colSubtotal = document.createElement("th");
-  colSubtotal.innerHTML = "Subtotal";
-  row.appendChild(colSubtotal);
+  const colSubtotal = document.createElement('th')
+  colSubtotal.innerHTML = 'Subtotal'
+  row.appendChild(colSubtotal)
 
-  var colAcao = document.createElement("th");
-  colAcao.innerHTML = "";
-  row.appendChild(colAcao);
+  const colAcao = document.createElement('th')
+  colAcao.innerHTML = ''
+  row.appendChild(colAcao)
 
-  var corpoTabela = tabela.createTBody();
-  for (var i = 0; i < listaDeObjetos.length; i++) {
-    var produto = listaDeObjetos[i];
-    var row = corpoTabela.insertRow();
+  const corpoTabela = tabela.createTBody()
+  for (let i = 0; i < listaDeObjetos.length; i++) {
+    const produto = listaDeObjetos[i]
+    var row = corpoTabela.insertRow()
 
-    var codigoCell = row.insertCell();
-    codigoCell.innerHTML = produto.codpro;
+    const codigoCell = row.insertCell()
+    codigoCell.innerHTML = produto.codpro
 
-    var nomeCell = row.insertCell();
-    nomeCell.innerHTML = produto.nome;
+    const nomeCell = row.insertCell()
+    nomeCell.innerHTML = produto.nome
 
-    var quantidadeCell = row.insertCell();
-    quantidadeCell.innerHTML = produto.qtd;
+    const quantidadeCell = row.insertCell()
+    quantidadeCell.innerHTML = produto.qtd
 
-    var subtotalCell = row.insertCell();
-    subtotalCell.innerHTML = produto.subtotal;
+    const subtotalCell = row.insertCell()
+    subtotalCell.innerHTML = produto.subtotal
 
-    var acaoCell = row.insertCell();
+    const acaoCell = row.insertCell()
     const button = document.createElement('button')
     button.appendChild(document.createTextNode('Excluir'))
     button.setAttribute('onclick', 'removerObjeto(' + i + ', event)')
-    acaoCell.appendChild(button);
+    acaoCell.appendChild(button)
   }
 }
 
