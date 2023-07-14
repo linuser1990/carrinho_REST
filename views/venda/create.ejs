@@ -12,6 +12,7 @@ UTILIZA ESSES DOIS LINKS
     $("#alertaEstoque").hide();
     $("#alertaRepetido").hide();
     $("#alertaEstDisp").hide();
+    $("#alertaCliente").hide();
   });
 </script>
 
@@ -113,10 +114,10 @@ UTILIZA ESSES DOIS LINKS
       class="form-control"
     />
     <h6 id="alertaEstoque" style="color: red">
-      Valor maior do que disponivel em estoque
     </h6>
     <h6 id="alertaRepetido" style="color: red">
-      Produto já adicionado na lista
+    </h6>
+    <h6 id="alertaCliente">
     </h6>
   </div>
   <!--AO CLICAR EM ADICIONAR AO CARRINHO, CHAMA A FUNÇÃO EM JS QUE ARMAZENA OS VALUES DOS CAMPOS PARA A ROTA /addCarrinho -->
@@ -218,6 +219,7 @@ UTILIZA ESSES DOIS LINKS
           $("#adicionar").prop("disabled", true);
           $("#subtotal").val("0");
           $("#alertaEstoque").show();
+          $("#alertaEstoque").html('Valor maior do que disponivel em estoque')
         }
         //$('#msg').val(response);
       });

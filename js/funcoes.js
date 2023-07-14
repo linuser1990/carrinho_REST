@@ -77,8 +77,12 @@ function estoqueAtual () {
       codpro
     },
     success: function (response) {
+      if (response.estoque <= 10) {
+        alertaEstDisp.style.color = 'red'
+      } else {
+        alertaEstDisp.style.color = 'green'
+      }
       alertaEstDisp.style.display = 'block'
-      alertaEstDisp.style.color = response.corTexto
       alertaEstDisp.innerText = ('Estoque atual: ' + response.estoque)
     },
     error: function (error) {
@@ -105,6 +109,7 @@ function redirecionarParaCarrinho2 () {
   const campototal = document.getElementById('total')
   const adicionarBtn = document.getElementById('adicionar')
   const alertaRepetido = document.getElementById('alertaRepetido')
+  const alertaCliente = document.getElementById('alertaCliente')
 
   const selectProduto = document.getElementById('selectproduto')
   const selectedIndex = selectProduto.selectedIndex
@@ -112,77 +117,89 @@ function redirecionarParaCarrinho2 () {
 
   // DESABILITA O SELECT CLIENTE AO INICIAR UMA VENDA PARA NAO MUDAR O CLIENTE NO MEIO DA VENDA
   const selectCliente = document.getElementById('selectcliente')
-  selectCliente.disabled = true
 
-  // VERIFICA SE JA TEM O MESMO PRODUTO ADICIONADO
-  for (let i = 0; i < listaDeObjetos.length; i++) {
-    if (listaDeObjetos[i].nome === selectedOptionText) {
-      console.log('achou')
-      encontrou = 2
-      break
-    } else {
-      encontrou = 1
-    }
-  }
-
-  // SE NÃO ACHOU
-  if (encontrou === 1) {
-    // soma o subtotal a cada produto adicionado ao carrinho
-    totalgeral = totalgeral + parseFloat(subtotal)
-
-    // preenche o campo total com a soma dos subtotal
-    // A VARIAVEL totalgeral É ZERADA TODA VEZ QUE INICIA UMA NOVA VENDA
-    // PORQUE ELA PEGA O VALOR 0 PREENCHIDO POR PADRAO NO CAMPO TOTAL
-    campototal.value = parseFloat(totalgeral)
-
-    // ALTERA O BOTAO ADICIONAR E VOLTA AO ESTADO INICIAL APÓS O TEMPO DETERMINADO
-    adicionarBtn.classList.remove('btn-light')
-    adicionarBtn.classList.add('btn-success')
-    adicionarBtn.textContent = 'ADICIONADO COM SUCESSO'
+  // VERIFICA SE CLIENTE OU PODUTO NÃO FORAÕ SELECIONADOS
+  if (selectCliente.value === 'Selecione um cliente' || selectProduto.value === 'Selecione um produto') {
+    alertaCliente.innerHTML = 'Cliente ou Produto não selecionado!'
+    alertaCliente.style.color = 'red'
+    alertaCliente.style.display = 'block'
     setTimeout(function () {
-      adicionarBtn.classList.remove('btn-success')
-      adicionarBtn.classList.add('btn-secondary')
-      adicionarBtn.textContent = 'Adicionar ao carrinho'
-    }, 600)
+      alertaCliente.style.display = 'none'
+    }, 3000)
+  } else {
+    selectCliente.disabled = true
 
-    adicionarObjeto(codpro, qtd, subtotal, selectedOptionText)
-
-    // LISTA DE ITENS ADICIONADOS, QUE APARECE NA TELA PRINCIPAL
-    function adicionarObjeto (codpro, qtd, subtotal, nome) {
-      const novoObjeto = {
-        codpro,
-        qtd,
-        subtotal,
-        nome
+    // VERIFICA SE JA TEM O MESMO PRODUTO ADICIONADO
+    for (let i = 0; i < listaDeObjetos.length; i++) {
+      if (listaDeObjetos[i].nome === selectedOptionText) {
+        console.log('achou')
+        encontrou = 2
+        break
+      } else {
+        encontrou = 1
       }
+    }
 
-      listaDeObjetos.push(novoObjeto)
+    // SE NÃO ACHOU
+    if (encontrou === 1) {
+    // soma o subtotal a cada produto adicionado ao carrinho
+      totalgeral = totalgeral + parseFloat(subtotal)
 
-      $.ajax({
-        url: '/venda/addCarrinho',
-        type: 'GET',
-        data: {
-          codcli,
+      // preenche o campo total com a soma dos subtotal
+      // A VARIAVEL totalgeral É ZERADA TODA VEZ QUE INICIA UMA NOVA VENDA
+      // PORQUE ELA PEGA O VALOR 0 PREENCHIDO POR PADRAO NO CAMPO TOTAL
+      campototal.value = parseFloat(totalgeral)
+
+      // ALTERA O BOTAO ADICIONAR E VOLTA AO ESTADO INICIAL APÓS O TEMPO DETERMINADO
+      adicionarBtn.classList.remove('btn-light')
+      adicionarBtn.classList.add('btn-success')
+      adicionarBtn.textContent = 'ADICIONADO COM SUCESSO'
+      setTimeout(function () {
+        adicionarBtn.classList.remove('btn-success')
+        adicionarBtn.classList.add('btn-secondary')
+        adicionarBtn.textContent = 'Adicionar ao carrinho'
+      }, 600)
+
+      adicionarObjeto(codpro, qtd, subtotal, selectedOptionText)
+
+      // LISTA DE ITENS ADICIONADOS, QUE APARECE NA TELA PRINCIPAL
+      function adicionarObjeto (codpro, qtd, subtotal, nome) {
+        const novoObjeto = {
           codpro,
           qtd,
-          subtotal
-        },
-        success: function (response) {
-        },
-        error: function (error) {
-          console.error('An error occurred while adding to the cart.') // Optional: Display an error message
+          subtotal,
+          nome
         }
-      })
 
-      // Atualiza a lista exibida na página
-      atualizarLista()
-    }
-  } else {
+        listaDeObjetos.push(novoObjeto)
+
+        $.ajax({
+          url: '/venda/addCarrinho',
+          type: 'GET',
+          data: {
+            codcli,
+            codpro,
+            qtd,
+            subtotal
+          },
+          success: function (response) {
+          },
+          error: function (error) {
+            console.error('An error occurred while adding to the cart.') // Optional: Display an error message
+          }
+        })
+
+        // Atualiza a lista exibida na página
+        atualizarLista()
+      }
+    } else {
     // EXIBE A MENSAGEM QUE JA FOI ADICIONADO O MESMO PRODUTO E ESCONDE A MENSAGEM APOS ALGUNS SEGUNDOS
-    alertaRepetido.style.display = 'block'
-    setTimeout(function () {
-      alertaRepetido.style.display = 'none'
-    }, 2000)
+      alertaRepetido.style.display = 'block'
+      alertaRepetido.innerHTML = 'Produto já adicionado na lista'
+      setTimeout(function () {
+        alertaRepetido.style.display = 'none'
+      }, 2000)
+    }
   }
 }
 
