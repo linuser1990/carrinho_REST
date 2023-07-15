@@ -286,28 +286,28 @@ function atualizarLista () {
     button.setAttribute('onclick', 'removerObjeto(' + i + ', event)')
     acaoCell.appendChild(button)
 
-    const buttonMinus = document.createElement('button');
-    buttonMinus.appendChild(document.createTextNode('-'));
-    buttonMinus.setAttribute('onclick', `mudarQuantidade(${i}, 'subtrair', event)`);
-    buttonMinus.setAttribute('id', 'subtrair'); // Atribuindo o ID 'meuId' ao botão
-    acaoCell.appendChild(buttonMinus);
+    const buttonMinus = document.createElement('button')
+    buttonMinus.appendChild(document.createTextNode('-'))
+    buttonMinus.setAttribute('onclick', `mudarQuantidade(${i}, 'subtrair', event)`)
+    buttonMinus.setAttribute('id', 'subtrair') // Atribuindo o ID 'meuId' ao botão
+    acaoCell.appendChild(buttonMinus)
 
-    const buttonPlus = document.createElement('button');
-    buttonPlus.appendChild(document.createTextNode('+'));
-    buttonPlus.setAttribute('onclick', `mudarQuantidade(${i}, 'adicionar', event)`);
-    buttonPlus.setAttribute('id', 'adicionar'); // Atribuindo o ID 'meuId' ao botão
-    acaoCell.appendChild(buttonPlus);
+    const buttonPlus = document.createElement('button')
+    buttonPlus.appendChild(document.createTextNode('+'))
+    buttonPlus.setAttribute('onclick', `mudarQuantidade(${i}, 'adicionar', event)`)
+    buttonPlus.setAttribute('id', 'adicionar') // Atribuindo o ID 'meuId' ao botão
+    acaoCell.appendChild(buttonPlus)
   }
 }
 
-function mudarQuantidade(index, operacao, event) {
+function mudarQuantidade (index, operacao, event) {
   event.preventDefault()
-  const produto = listaDeObjetos[index];
+  const produto = listaDeObjetos[index]
   const buttonSubtrair = document.getElementById('subtrair')
   const buttonAdicionar = document.getElementById('adicionar')
-  var campototal = document.getElementById('total')
-  var codpro = produto.codpro
-  var precoRecebido
+  const campototal = document.getElementById('total')
+  const codpro = produto.codpro
+  let precoRecebido
 
   if (operacao === 'adicionar') {
     produto.qtd++
@@ -316,45 +316,40 @@ function mudarQuantidade(index, operacao, event) {
       url: '/venda/verificaPrecoVenda',
       type: 'GET',
       data: {
-        codpro,operacao,index
+        codpro, operacao, index
       },
       success: function (response) {
         produto.subtotal = parseFloat(produto.subtotal) + parseFloat(response.precovenda)
         campototal.value = parseFloat(campototal.value) + parseFloat(response.precovenda)
         totalgeral = totalgeral + parseFloat(produto.subtotal)
-        atualizarLista();
-        
+        atualizarLista()
       },
       error: function (error) {
         console.error('error.') // Optional: Display an error message
       }
     })
-
-  } else if (operacao === 'subtrair' && produto.qtd >1) {
+  } else if (operacao === 'subtrair' && produto.qtd > 1) {
     produto.qtd--
     $.ajax({
       url: '/venda/verificaPrecoVenda',
       type: 'GET',
       data: {
-        codpro,operacao,index
-        
+        codpro, operacao, index
+
       },
       success: function (response) {
         produto.subtotal = parseFloat(produto.subtotal) - parseFloat(response.precovenda)
         campototal.value = parseFloat(campototal.value) - parseFloat(response.precovenda)
         totalgeral = totalgeral - parseFloat(response.precovenda)
-        atualizarLista();
-        
+        atualizarLista()
       },
       error: function (error) {
-        console.error('error.',error) // Optional: Display an error message
+        console.error('error.', error) // Optional: Display an error message
       }
     })
-   
   }
 
   // Atualizar a tabela após a alteração da quantidade
-  
 }
 
 function mostrarTexto () {

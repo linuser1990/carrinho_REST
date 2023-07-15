@@ -262,19 +262,16 @@ const verificaPrecoVenda = async (req, res) => {
    
     const {rows} = await pool.query('SELECT precovenda FROM produto WHERE codpro = $1',[codpro])
     
+    // ATUALIZA OS CAMPOS SUBTOTAL,QTD DA LISTA E O TOTAL GERAL
     if (operacao === 'adicionar') {
       total += parseFloat(rows[0].precovenda)
       listaDeObjetos[index].subtotal =parseFloat(listaDeObjetos[index].subtotal ) + parseFloat(rows[0].precovenda)
       listaDeObjetos[index].qtd = parseInt(listaDeObjetos[index].qtd) + 1
-      console.log('total '+total)
-      console.log('listaDeObjetos[index].subtotal '+listaDeObjetos[index].subtotal)
-    } else {
+   } else {
       total -= parseFloat(rows[0].precovenda)
       listaDeObjetos[index].subtotal =parseFloat(listaDeObjetos[index].subtotal ) -  parseFloat(rows[0].precovenda)
       listaDeObjetos[index].qtd = parseInt(listaDeObjetos[index].qtd) - 1
-      console.log('total '+total)
-      console.log('listaDeObjetos[index].subtotal '+parseFloat(listaDeObjetos[index].subtotal))
-    }
+   }
     res.send(rows[0])
   } catch (error) {
     console.log(error)
