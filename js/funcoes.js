@@ -145,6 +145,8 @@ function redirecionarParaCarrinho2 () {
     // soma o subtotal a cada produto adicionado ao carrinho
       totalgeral = totalgeral + parseFloat(subtotal)
 
+      console.log('total geral '+totalgeral)
+
       // preenche o campo total com a soma dos subtotal
       // A VARIAVEL totalgeral É ZERADA TODA VEZ QUE INICIA UMA NOVA VENDA
       // PORQUE ELA PEGA O VALOR 0 PREENCHIDO POR PADRAO NO CAMPO TOTAL
@@ -303,11 +305,8 @@ function atualizarLista () {
 function mudarQuantidade (index, operacao, event) {
   event.preventDefault()
   const produto = listaDeObjetos[index]
-  const buttonSubtrair = document.getElementById('subtrair')
-  const buttonAdicionar = document.getElementById('adicionar')
   const campototal = document.getElementById('total')
   const codpro = produto.codpro
-  let precoRecebido
 
   if (operacao === 'adicionar') {
     produto.qtd++
@@ -321,7 +320,8 @@ function mudarQuantidade (index, operacao, event) {
       success: function (response) {
         produto.subtotal = parseFloat(produto.subtotal) + parseFloat(response.precovenda)
         campototal.value = parseFloat(campototal.value) + parseFloat(response.precovenda)
-        totalgeral = totalgeral + parseFloat(produto.subtotal)
+        totalgeral = totalgeral + parseFloat(response.precovenda)
+
         atualizarLista()
       },
       error: function (error) {

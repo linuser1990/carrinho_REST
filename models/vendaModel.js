@@ -267,6 +267,10 @@ const verificaPrecoVenda = async (req, res) => {
       total += parseFloat(rows[0].precovenda)
       listaDeObjetos[index].subtotal =parseFloat(listaDeObjetos[index].subtotal ) + parseFloat(rows[0].precovenda)
       listaDeObjetos[index].qtd = parseInt(listaDeObjetos[index].qtd) + 1
+
+      console.log('total '+total)
+      console.log('qtd '+listaDeObjetos[index].qtd)
+
    } else {
       total -= parseFloat(rows[0].precovenda)
       listaDeObjetos[index].subtotal =parseFloat(listaDeObjetos[index].subtotal ) -  parseFloat(rows[0].precovenda)
