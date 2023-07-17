@@ -5,7 +5,14 @@
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1, shrink-to-fit=no"
+      
     />
+    <meta property="og:title" content="Título da página" />
+    <meta property="og:description" content="Descrição da página" />
+    <meta property="og:image" content="URL da imagem em destaque" />
+    <meta property="og:url" content="URL da página" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+
     <title>Gerenciamento de Vendas</title>
     <!-- Adicionando o CSS do Bootstrap -->
     <link
@@ -14,6 +21,28 @@
     />
   </head>
   <body>
+
+    <!-- ABRE O WHATSAPP E ENVIA OQUE ESTÁ NA VARIAVEL 'mensagem'-->
+    <script>
+      function exibirMenuCompartilhamento() {
+        var mensagem = 'Confira este relatório: ' + window.location.href;
+        var url = 'https://api.whatsapp.com/send?text=' + encodeURIComponent(mensagem);
+        window.open(url);
+      }
+    </script>
+    
+    <!-- ICONE DE COMPARTILHAMENTO-->
+    <a href="#" onclick="exibirMenuCompartilhamento()">ESCOLHER QUAL CONTATO
+      <i class="fas fa-share"></i>
+    </a>
+    <br>
+
+    <a href="https://api.whatsapp.com/send?phone=55032988716047">JA ABRE NA CONVERSA DE UM CONTATO ESPECIFICO
+      <i class="fas fa-share"></i>
+    </a>
+    <br>
+
+    
     <style>
       .navbar {
         position: fixed;
