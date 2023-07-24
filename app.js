@@ -6,6 +6,7 @@ const clientesRoutes = require('./routes/routesCliente')
 const homeRoutes = require('./routes/routesHome')
 const produtosRoutes = require('./routes/routesProduto');
 const vendasRoutes = require('./routes/routesVenda')
+const shopping_cartRoutes = require('./routes/routesShopping_cart')
 
 const app = express()
 
@@ -28,6 +29,7 @@ app.use('/clientes', clientesRoutes)
 app.use('/produtos', produtosRoutes);
 app.use('/home', homeRoutes)
 app.use('/venda', vendasRoutes)
+app.use('/shopping_cart',shopping_cartRoutes)
 
 app.get('/', (req, res) => {
   res.redirect('/home')

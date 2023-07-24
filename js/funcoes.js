@@ -17,7 +17,7 @@ function busca () {
 }
 
 // essa função armazena os codigos do produto e do cliente
-// e preenche o value do input
+// e preenche o value do input oculto (hidden)
 // o preço venda tambem é passado ao selecionar o produto
 function getSelectedValue () {
   const selectCliente = document.getElementById('selectcliente')

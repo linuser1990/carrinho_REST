@@ -145,12 +145,31 @@ const detalhesTodasVendas = async (req, res) => {
   }
 }
 
+const formProdutosMaisVendidosPeriodo = async (req, res) => {
+  res.render('./reports/formProdutosMaisVendidosPeriodo')
+}
+
 const formVendasPeriodo = async (req, res) => {
   res.render('./reports/formVendasPeriodo')
 }
 
 const formMaioresVendasPeriodo = async (req, res) => {
   res.render('./reports/formMaioresVendasPeriodo')
+}
+
+const relProdutosMaisVendidosPeriodo = async (req, res) => {
+  const startDate = req.body.startDate
+  const endDate = req.body.endDate
+  const cols = [startDate,endDate]
+
+  const sql = `SELECT itens_venda.produto_codpro,SUM(qtd) AS soma_qtd from venda 
+   INNER JOIN itens_venda ON venda.codvenda = itens_venda.venda_codvenda 
+   WHERE venda.data_venda BETWEEN $1 AND $2
+   GROUP BY(itens_venda.produto_codpro) ORDER BY soma_qtd DESC`
+
+  const {rows} = await pool.query(sql,cols)
+
+  res.render('./reports/relProdutosMaisVendidosPeriodo',{resultado: rows})
 }
 
 const relVendasPeriodo = async (req, res) => {
@@ -168,7 +187,7 @@ const relVendasPeriodo = async (req, res) => {
 
   const sql = "SELECT *,TO_CHAR(data_venda,'DD/MM/YYYY') as datav,cliente.nome as nome_cliente " +
     ' FROM venda inner join cliente on ' +
-    'venda.cliente_codcli = cliente.codcli ' +
+    ' venda.cliente_codcli = cliente.codcli ' +
     " where data_venda BETWEEN TO_DATE('" + formattedDateStart + "','DD/MM/YYYY') and TO_DATE('" + formattedDateEnd + "','DD/MM/YYYY')" +
     ' order by codvenda desc'
   pool.query(sql, (error, results) => {
@@ -295,5 +314,7 @@ module.exports = {
   pesquisaRadioAntigas,
   testeLista,
   removeDoCarrinho,
-  verificaPrecoVenda
+  verificaPrecoVenda,
+  formProdutosMaisVendidosPeriodo,
+  relProdutosMaisVendidosPeriodo
 }

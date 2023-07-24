@@ -1,0 +1,57 @@
+<%- include('../header'); %>
+
+  <div class="container">
+        <h1>Selecione o periodo:</h1>
+        <form id="searchForm" method="POST" action="/venda/relProdutosMaisVendidosPeriodo">
+          <div class="text-right" style="font-weight: bold;font-size: 16;">
+            
+              <input type="radio" name="opcao" value="navegador" checked>Exibir no navegador 
+              <br>
+              <input type="radio" name="opcao" value="pdf" > Exibir em PDF 
+            
+          </div>
+          <div class="row">
+           <div class="col">
+          <div class="mb-3">
+            <label for="startDate" class="form-label">Data de Início:</label>
+            <input type="date" class="form-control" id="startDate" name="startDate">
+          </div>
+          <div class="mb-3">
+            <label for="endDate" class="form-label">Data de Fim:</label>
+            <input type="date" class="form-control" id="endDate" name="endDate">
+          </div>
+          <button type="submit" class="btn btn-primary">Pesquisar</button>
+        </form>
+     </div>
+    </div>
+  </div>
+
+  <!--DEFINE A DATA ATUAL PARA PREENCHER O INPUT AO ABRIR A PAGINA-->
+  <script>
+    // Get the current date
+    var currentDate = new Date();
+    
+    // Format the date as "YYYY-MM-DD"
+    var formattedDate = currentDate.toISOString().split("T")[0];
+    
+    // Set the value of the input field
+    document.getElementById("startDate").value = formattedDate;
+
+     // Set the value of the input field
+    document.getElementById("endDate").value = formattedDate;
+    /*
+    currentDate.toISOString(): A propriedade toISOString() é um método de objetos Date que retorna uma string no formato ISO 8601, representando a data e hora do objeto Date. Isso inclui a data, hora, fuso horário e outros detalhes. Por exemplo, o formato ISO 8601 para uma data é "YYYY-MM-DDTHH:mm:ss.sssZ". A parte "T" separa a data da hora.
+
+    .split("T"): Aqui, a string gerada pelo toISOString() é dividida em um array usando o caractere "T" como separador. Isso é feito para obter apenas a parte da data, ignorando a parte da hora e outros detalhes que vêm após o "T".
+
+    [0]: O código usa [0] para acessar o primeiro elemento do array retornado pelo split("T"). Como resultado, obtemos a parte da data isolada, que é o que geralmente queremos na maioria dos casos.
+
+    Resumindo, o código está transformando um objeto de data (Date) em uma string no formato ISO 8601 ("YYYY-MM-DDTHH:mm:ss.sssZ") e, em seguida, recuperando apenas a parte da data (sem a hora) como uma string no formato "YYYY-MM-DD".
+
+    Por exemplo, se currentDate fosse 24 de julho de 2023, o resultado seria a string "2023-07-24".
+    */
+
+    </script>
+
+
+<%- include('../footer'); %>

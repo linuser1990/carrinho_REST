@@ -2,6 +2,7 @@ const express = require('express')
 const routes = express.Router()
 const controllerVenda = require('../models/vendaModel')
 
+routes.get('/formProdutosMaisVendidosPeriodo',controllerVenda.formProdutosMaisVendidosPeriodo)
 routes.get('/verificaPrecoVenda',controllerVenda.verificaPrecoVenda)
 routes.get('/removeDoCarrinho',controllerVenda.removeDoCarrinho)
 routes.get('/testelista',controllerVenda.testeLista)
@@ -18,5 +19,6 @@ routes.post('/verificaEstoque',controllerVenda.verificaEstoque)
 routes.post('/inserirvendacarrinho',controllerVenda.inserirvendacarrinho)
 routes.post('/relVendasPeriodo',controllerVenda.relVendasPeriodo)
 routes.post('/relMaioresVendasPeriodo',controllerVenda.relMaioresVendasPeriodo)
+routes.post('/relProdutosMaisVendidosPeriodo',controllerVenda.relProdutosMaisVendidosPeriodo)
 
 module.exports = routes
