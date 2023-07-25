@@ -191,7 +191,7 @@ const relProdutosMaisVendidosPeriodo = async (req, res) => {
       // Gera o conteúdo do arquivo PDF
       doc.fontSize(16).text('Produtos mais vendidos por Periodo', { align: 'center' })
       doc.moveDown()
-      doc.fontSize(12).text(`Periodo: ${formattedDateStart} - ${formattedDateEnd}`)
+      doc.fontSize(12).text(`Periodo: ${formattedDateStart} - ${formattedDateEnd}`, {align: 'right'})
       doc.moveDown()
 
       resultado.forEach((produto) => {
