@@ -1,1 +1,32 @@
-<h1>entrou: <%=resultado[0].produto_codpro%> </h1>
+<%- include('../header')%>
+
+<div class="container">
+    <h1>Relatório- Maiores Vendas - por periodo</h1>
+    <br>
+    Periodo: <%=startDate%> até <%=endDate%> 
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Código Produto</th>
+          <th>Nome</th>
+          <th>Quantidade Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        <%
+        var r = resultado.length;
+		    for(var i=0;i<r;i++)
+		    {
+          %>
+        <tr>
+          <td><%=resultado[i].produto_codpro%></td>
+          <td><%=resultado[i].nome%></td>
+          <td><%=resultado[i].soma_qtd%></td>
+      </tr>
+        
+      <% } %>
+      </tbody>
+    </table>
+  </div>
+
+<%- include('../footer')%>

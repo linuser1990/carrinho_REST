@@ -162,14 +162,15 @@ const relProdutosMaisVendidosPeriodo = async (req, res) => {
   const endDate = req.body.endDate
   const cols = [startDate,endDate]
 
-  const sql = `SELECT itens_venda.produto_codpro,SUM(qtd) AS soma_qtd from venda 
+  const sql = `SELECT nome,itens_venda.produto_codpro,SUM(qtd) AS soma_qtd from venda 
    INNER JOIN itens_venda ON venda.codvenda = itens_venda.venda_codvenda 
+   INNER JOIN produto ON produto.codpro = itens_venda.produto_codpro
    WHERE venda.data_venda BETWEEN $1 AND $2
-   GROUP BY(itens_venda.produto_codpro) ORDER BY soma_qtd DESC`
+   GROUP BY(itens_venda.produto_codpro,produto.nome) ORDER BY soma_qtd DESC`
 
   const {rows} = await pool.query(sql,cols)
 
-  res.render('./reports/relProdutosMaisVendidosPeriodo',{resultado: rows})
+  res.render('./reports/relProdutosMaisVendidosPeriodo',{resultado: rows,startDate,endDate})
 }
 
 const relVendasPeriodo = async (req, res) => {
