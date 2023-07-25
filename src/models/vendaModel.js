@@ -1,4 +1,6 @@
 const pool = require('../db/db')
+const PDFDocument = require('pdfkit')
+const { exec } = require('shelljs')
 
 // Criação do array vazio para armazenar os objetos
 let listaDeObjetos = []
@@ -160,17 +162,62 @@ const formMaioresVendasPeriodo = async (req, res) => {
 const relProdutosMaisVendidosPeriodo = async (req, res) => {
   const startDate = req.body.startDate
   const endDate = req.body.endDate
+  const formattedDateStart = startDate.replace(/(\d{4})-(\d{2})-(\d{2})/, '$3/$2/$1');
+  const formattedDateEnd = endDate.replace(/(\d{4})-(\d{2})-(\d{2})/, '$3/$2/$1');
+
   const cols = [startDate,endDate]
+  const opcaoExibirResultado = req.body.opcao
 
   const sql = `SELECT nome,itens_venda.produto_codpro,SUM(qtd) AS soma_qtd from venda 
    INNER JOIN itens_venda ON venda.codvenda = itens_venda.venda_codvenda 
    INNER JOIN produto ON produto.codpro = itens_venda.produto_codpro
-   WHERE venda.data_venda BETWEEN $1 AND $2
+   WHERE venda.data_venda BETWEEN $1 AND $2 
    GROUP BY(itens_venda.produto_codpro,produto.nome) ORDER BY soma_qtd DESC`
 
-  const {rows} = await pool.query(sql,cols)
+  
 
-  res.render('./reports/relProdutosMaisVendidosPeriodo',{resultado: rows,startDate,endDate})
+  if (opcaoExibirResultado === 'pdf') {
+    const doc = new PDFDocument()
+
+    // Configura o cabeçalho do arquivo PDF
+    res.setHeader('Content-Disposition', 'attachment; filename="produtos.pdf"')
+    res.setHeader('Content-Type', 'application/pdf')
+
+    // Consulta os dados do banco de dados
+    try {
+      const result = await pool.query(sql,cols)
+      const resultado = result.rows
+
+      // Gera o conteúdo do arquivo PDF
+      doc.fontSize(16).text('Produtos mais vendidos por Periodo', { align: 'center' })
+      doc.moveDown()
+      doc.fontSize(12).text(`Periodo: ${formattedDateStart} - ${formattedDateEnd}`)
+      doc.moveDown()
+
+      resultado.forEach((produto) => {
+        doc.fontSize(14).text(`Código do Produto: ${produto.produto_codpro}`)
+        doc.fontSize(14).text(`Nome: ${produto.nome}`)
+        doc.fontSize(12).text(`Total: ${produto.soma_qtd}`)
+        doc.moveDown()
+      })
+
+      // Gera o arquivo PDF
+      doc.pipe(res)
+      doc.end()
+
+      // Abre o arquivo PDF ao final do processo
+      res.on('finish', () => {
+        exec('xdg-open produtos.pdf')
+      })
+    } catch (error) {
+      console.error('Erro ao consultar o banco de dados:', error)
+      res.status(500).send('Erro ao gerar o arquivo PDF')
+    }
+  } else {
+    const {rows} = await pool.query(sql,cols)
+    res.render('./reports/relProdutosMaisVendidosPeriodo',{resultado: rows,startDate,endDate})
+  }
+
 }
 
 const relVendasPeriodo = async (req, res) => {
