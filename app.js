@@ -2,11 +2,11 @@ require('dotenv').config()
 const express = require('express')
 const path = require('path')
 const bodyParser = require('body-parser')
-const clientesRoutes = require('./routes/routesCliente')
-const homeRoutes = require('./routes/routesHome')
-const produtosRoutes = require('./routes/routesProduto');
-const vendasRoutes = require('./routes/routesVenda')
-const shopping_cartRoutes = require('./routes/routesShopping_cart')
+const clientesRoutes = require('./src/routes/routesCliente')
+const homeRoutes = require('./src/routes/routesHome')
+const produtosRoutes = require('./src/routes/routesProduto');
+const vendasRoutes = require('./src/routes/routesVenda')
+const shopping_cartRoutes = require('./src/routes/routesShopping_cart')
 
 const app = express()
 
@@ -21,7 +21,7 @@ app.set('view engine', 'ejs')
 // REMOVE ERRO DE MIME TYPE CSS
 // NECESSARIO PARA USAR AS IMAGENS DO DIRETORIO 'imagens'
 // Defina o diretório de views
-app.set('views', path.join(__dirname, 'views'))
+app.set('views', path.join(__dirname, 'src/views'))
 app.use(express.static(path.join(__dirname, '/')))
 
 // Rotas
