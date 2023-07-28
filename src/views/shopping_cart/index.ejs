@@ -1,3 +1,61 @@
-<%- include('../header'); %>
+<html>
+  <head>
+    <title>Shopping Cart</title>
+    <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css" />
+    <link rel='stylesheet' href='/src/css/style.css' />
+  </head>
+  <body>
+    <h1><%=title%></h1>
+    <input type="tel">
+    <div class="row">
+        <div class="col-xs-4">
+            <div class="pull-left">
+            <a href="/"><i class="fa fa-home" aria-hidden="true"></i> Home</a>
+            </div>
+        </div>
 
-<%- include('../footer'); %>
+        <div class="col-xs-8">
+       
+            <div class="pull-right">
+              <a id="cartLink" href="#"> <i class="fa fa-shopping-cart" aria-hidden="true"> </i> Cart(<span id="cartItemCount">0</span>)
+              </a>
+            </div>
+
+    </div>
+   <br>
+   <input id="codpro" name="codpro" hidden>
+    <% for (var i =0;i<=5;i++) { %>
+    <div class="thumbnail">
+        <div class="caption">
+          <h3><%=produto[i].nome%></h3>
+          
+            <p class="description"><%=produto[i].descricao%><span class="label label-info" ><%=produto[i].precovenda%> cada</span></p>
+            <div class="clearfix">
+            <div class="price pull-left"><i class="fa fa-tag" aria-hidden="true"></i> <%=produto[i].precovenda%> </div>
+              <a href="#" onclick="addCart('<%=produto[i].codpro%>');" class="btn btn-default pull-right" role="button"><i class="fa fa-shopping-cart" aria-hidden="true"></i> Add to cart</a>
+            </div>
+        </div>
+      </div>
+      <% } %>
+
+  <script> 
+    function addCart(codigo) {
+      //Atualiza numero itens Cart()
+      updateCartItemCount()
+
+      //CHAMA A ROTA e passa o parametro codpro
+      $.post("/shopping_cart/add", {codpro: codigo}, function (response) {
+        
+      })
+      }
+
+  </script>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+  <script src="/src/js/shopping_cart.js"></script>
+  </body>
+</html>
+ 

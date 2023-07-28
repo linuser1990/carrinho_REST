@@ -21,9 +21,9 @@ const getProdutoById = async (req, res) => {
 
 const createProduto = async (req, res) => {
   try {
-    const { nome, precocusto, precovenda, estoque } = req.body
-    const { rows } = await pool.query('INSERT INTO produto (nome,precocusto,precovenda,estoque)' +
-      ' values ($1,$2,$3,$4)', [nome, precocusto, precovenda, estoque])
+    const { nome, precocusto, precovenda, estoque, descricao} = req.body
+    const { rows } = await pool.query('INSERT INTO produto (nome,precocusto,precovenda,estoque,descricao)' +
+      ' values ($1,$2,$3,$4,$5)', [nome, precocusto, precovenda, estoque,descricao])
     res.redirect('/produtos')
   } catch (error) {
     console.log(error)
@@ -33,9 +33,9 @@ const createProduto = async (req, res) => {
 const updateProduto = async (req, res) => {
   try {
     const { codpro } = req.params
-    const { nome, precocusto, precovenda, estoque } = req.body
-    const { rows } = await pool.query('UPDATE produto set nome = $1,precocusto = $2,' +
-      ' precovenda=$3, estoque = $4 where codpro = $5', [nome, precocusto, precovenda, estoque, codpro])
+    const { nome, descricao,  precocusto, precovenda, estoque} = req.body
+    const { rows } = await pool.query('UPDATE produto set nome = $1,descricao = $2, precocusto = $3,' +
+      ' precovenda=$4, estoque = $5 where codpro = $6', [nome, descricao, precocusto, precovenda, estoque, codpro])
     res.redirect('/produtos')
   } catch (error) {
     console.log(error)
