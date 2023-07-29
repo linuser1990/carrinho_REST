@@ -17,12 +17,16 @@
         </div>
 
         <div class="col-xs-8">
-       
             <div class="pull-right">
-              <a id="cartLink" href="#"> <i class="fa fa-shopping-cart" aria-hidden="true"> </i> Cart(<span id="cartItemCount">0</span>)
+              <a id="cartLink" href="#" onclick="exibirLista();"> <i class="fa fa-shopping-cart" aria-hidden="true"> </i> Cart(<span id="cartItemCount">0</span>)
               </a>
             </div>
-
+        </div>
+        <div class="row">
+          <div class="pull-right">
+            <ul id="lista" style="display: none;"></ul>
+          </div>
+        </div>
     </div>
    <br>
    <input id="codpro" name="codpro" hidden>
@@ -40,17 +44,53 @@
       </div>
       <% } %>
 
+  <!--MÉTODO 1 DE EXIBIR OS ITENS ADICIONADOS-->    
   <script> 
     function addCart(codigo) {
       //Atualiza numero itens Cart()
       updateCartItemCount()
 
       //CHAMA A ROTA e passa o parametro codpro
-      $.post("/shopping_cart/add", {codpro: codigo}, function (response) {
-        
-      })
-      }
+      $.post("/shopping_cart/add", {codpro: codigo}, function (resposta) {
+        console.log(resposta[0].nome)
 
+        if (Array.isArray(resposta)) {
+          const listaElement = document.getElementById('lista');
+
+          // Limpar o conteúdo atual da lista
+          listaElement.innerHTML = '';
+
+          // Iterar sobre cada objeto na 'listaDeObjetos'
+          resposta.forEach(item => {
+            // Criar elementos HTML para representar as informações do objeto
+            const liElement = document.createElement('li');
+            const codproElement = document.createElement('span');
+            const nomeElement = document.createElement('span');
+            const descricaoElement = document.createElement('span');
+            const qtdElement = document.createElement('span');
+            const subtotalElement = document.createElement('span');
+
+            // Definir o texto para cada elemento criado
+            codproElement.textContent = item.codpro;
+            nomeElement.textContent = ' ' + item.nome;
+            qtdElement.textContent = ' [' + item.qtd + ']';
+            subtotalElement.textContent = 'R$:' + item.subtotal;
+
+            // Adicionar os elementos criados à liElement
+            liElement.appendChild(codproElement);
+            liElement.appendChild(nomeElement);
+            liElement.appendChild(descricaoElement);
+            liElement.appendChild(qtdElement);
+            liElement.appendChild(subtotalElement);
+
+            // Adicionar liElement à lista
+            listaElement.appendChild(liElement);
+          });
+        } else {
+          console.error('Resposta inválida do servidor.');
+        }
+      })
+    }
   </script>
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
@@ -58,4 +98,7 @@
   <script src="/src/js/shopping_cart.js"></script>
   </body>
 </html>
+
+
+
  
