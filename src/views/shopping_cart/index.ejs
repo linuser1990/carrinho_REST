@@ -17,16 +17,17 @@
         </div>
 
         <div class="col-xs-8">
-            <div class="pull-right">
-              <a id="cartLink" href="#" onclick="exibirLista();"> <i class="fa fa-shopping-cart" aria-hidden="true"> </i> Cart(<span id="cartItemCount">0</span>)
-              </a>
+        <div class="dropdown pull-right">
+            <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                <i class="fa fa-shopping-cart" aria-hidden="true"></i> Cart(<span id="cartItemCount">0</span>)
+            </a>
+            <div class="dropdown-menu">
+              <div class="cart">
+                <div id="cartItems"></div>
+              </div>
             </div>
-        </div>
-        <div class="row">
-          <div class="pull-right">
-            <ul id="lista" style="display: none;"></ul>
-          </div>
-        </div>
+         </div>
+    </div>
     </div>
    <br>
    <input id="codpro" name="codpro" hidden>
@@ -56,49 +57,66 @@
       $.post("/shopping_cart/add", {codpro: codigo}, function (resposta) {
        
         if (Array.isArray(resposta)) {
-          const listaElement = document.getElementById('lista');
+          const cartItemsElement = document.getElementById('cartItems');
 
-          // Limpar o conteúdo atual da lista
-          listaElement.innerHTML = '';
+          // Limpar o conteúdo atual do itens-menu
+          cartItemsElement.innerHTML = '';
 
           // Iterar sobre cada objeto na 'listaDeObjetos'
-          resposta.forEach(item => {
-            // Criar elementos HTML para representar as informações do objeto
-            const liElement = document.createElement('li');
-            const codproElement = document.createElement('span');
-            const nomeElement = document.createElement('span');
-            const descricaoElement = document.createElement('span');
-            const qtdElement = document.createElement('span');
-            const subtotalElement = document.createElement('span');
+          resposta.forEach(itens => {
+
+            const itemDiv = document.createElement('div');
+            itemDiv.classList.add('row');
+
+            const nomeDiv = document.createElement('div');
+            nomeDiv.classList.add('col-xs-4');
+            nomeDiv.innerHTML = itens.nome;
+
+            const divQtd = document.createElement('div');
+            divQtd.classList.add('col-xs-4','text-right')
+
+
+            const qtdSpan = document.createElement('span');
+            qtdSpan.classList.add('badge');
+            qtdSpan.innerHTML = itens.qtd;
+
+            // Adicionar o <span> à div divQtd
+            divQtd.appendChild(qtdSpan);
+
+            const subtotalDiv = document.createElement('div');
+            subtotalDiv.classList.add('col-xs-4', 'text-right');
+            subtotalDiv.innerHTML = itens.subtotal;
+
+            // Adicionar os elementos criados ao elemento 'cartItemsElement'
+            itemDiv.appendChild(nomeDiv);
+            itemDiv.append(divQtd)
+            itemDiv.appendChild(subtotalDiv);
             
 
-            total = parseFloat(total) + parseFloat(item.subtotal);
+            cartItemsElement.appendChild(itemDiv);
 
-            // Definir o texto para cada elemento criado
-            codproElement.textContent = item.codpro;
-            nomeElement.textContent = ' ' + item.nome;
-            qtdElement.textContent = ' [' + item.qtd + ']';
-            subtotalElement.textContent = 'R$:' + item.subtotal;
+            total = parseFloat(total) + parseFloat(itens.subtotal);
+        })
+        // Criar um elemento para exibir o total
+        const totalElement = document.createElement('div');
+        totalElement.classList.add('dropdown-item','text-right','totalPrice');
+        totalElement.innerHTML = 'Total: R$ ' + total.toFixed(2);
 
-            // Adicionar os elementos criados à liElement
-            liElement.appendChild(codproElement);
-            liElement.appendChild(nomeElement);
-            liElement.appendChild(descricaoElement);
-            liElement.appendChild(qtdElement);
-            liElement.appendChild(subtotalElement);
-            
-            
+        const divBtn = document.createElement('div')
+        divBtn.classList.add('row','text-right')
 
-            // Adicionar liElement à lista
-            listaElement.appendChild(liElement);
-          })
-           // Criar um elemento para exibir o total
-          const totalElement = document.createElement('span');
-          totalElement.textContent = 'Total: R$ ' + total.toFixed(2);
+        const btnProceed = document.createElement('a');
+        btnProceed.classList.add('btn','btn-success');
+        btnProceed.innerHTML = 'Proceed'
+        btnProceed.setAttribute('href','/');
 
-          // Adicionar o elemento com o total após o loop
-          listaElement.appendChild(totalElement);
-          console.log(total)
+        divBtn.append(btnProceed)
+
+         // Adicionar o elemento com o total após o loop
+        cartItemsElement.appendChild(totalElement);
+        cartItemsElement.appendChild(divBtn);
+
+        console.log(total)
           
         } else {
           console.error('Resposta inválida do servidor.');

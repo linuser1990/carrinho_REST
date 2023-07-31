@@ -1,6 +1,5 @@
 const pool = require('../db/db')
 var listaDeObjetos = []
-var total = 7
 
 const addCart = async (req, res) => {
     const {codpro} = req.body
