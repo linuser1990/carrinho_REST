@@ -1,5 +1,6 @@
 const pool = require('../db/db')
 var listaDeObjetos = []
+var total = 7
 
 const addCart = async (req, res) => {
     const {codpro} = req.body
@@ -22,7 +23,7 @@ const addCart = async (req, res) => {
     } else {
         adicionarObjeto(codpro, rows[0].nome,rows[0].descricao,1,rows[0].precovenda)
     }
-    res.send(listaDeObjetos)
+    res.status(200).send(listaDeObjetos) 
 }
 
 const showIndexPage = async (req, res) => {

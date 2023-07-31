@@ -50,10 +50,11 @@
       //Atualiza numero itens Cart()
       updateCartItemCount()
 
+      var total = 0
+
       //CHAMA A ROTA e passa o parametro codpro
       $.post("/shopping_cart/add", {codpro: codigo}, function (resposta) {
-        console.log(resposta[0].nome)
-
+       
         if (Array.isArray(resposta)) {
           const listaElement = document.getElementById('lista');
 
@@ -69,6 +70,9 @@
             const descricaoElement = document.createElement('span');
             const qtdElement = document.createElement('span');
             const subtotalElement = document.createElement('span');
+            
+
+            total = parseFloat(total) + parseFloat(item.subtotal);
 
             // Definir o texto para cada elemento criado
             codproElement.textContent = item.codpro;
@@ -82,10 +86,20 @@
             liElement.appendChild(descricaoElement);
             liElement.appendChild(qtdElement);
             liElement.appendChild(subtotalElement);
+            
+            
 
             // Adicionar liElement à lista
             listaElement.appendChild(liElement);
-          });
+          })
+           // Criar um elemento para exibir o total
+          const totalElement = document.createElement('span');
+          totalElement.textContent = 'Total: R$ ' + total.toFixed(2);
+
+          // Adicionar o elemento com o total após o loop
+          listaElement.appendChild(totalElement);
+          console.log(total)
+          
         } else {
           console.error('Resposta inválida do servidor.');
         }
