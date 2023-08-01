@@ -31,6 +31,13 @@ const showIndexPage = async (req, res) => {
         
 }
 
+const showCartView = async (req, res) => {
+    //const inputItensCountg = req.body
+    const inputItensCountg = req.query.itensCount
+    console.log(inputItensCountg)
+    res.render('./shopping_cart/cart',{lista: listaDeObjetos,inputItensCountg})
+}
+
   
 // LISTA DE ITENS ADICIONADOS, QUE APARECE NA TELA PRINCIPAL
 function adicionarObjeto (codpro, nome,descricao,qtd,subtotal) {
@@ -48,5 +55,6 @@ listaDeObjetos.push(novoObjeto)
 module.exports = {
     showIndexPage,
     addCart,
+    showCartView,
     listaDeObjetos
 }
