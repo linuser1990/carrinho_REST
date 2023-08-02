@@ -1,33 +1,4 @@
- <html>
-    <head>
-        <title>Shopping Cart</title>
-        <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet" />
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous" />
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css" />
-        <link rel='stylesheet' href='/src/css/style.css' />
-      </head>
-    <body>
-
-        <div class="row">
-            <div class="col-xs-4">
-                <div class="pull-left">
-                <a href="/"><i class="fa fa-home" aria-hidden="true"></i> Home</a>
-                </div>
-            </div>
-    
-        <div class="col-xs-8">
-              <div class="dropdown pull-right">
-                  <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                      <i class="fa fa-shopping-cart" aria-hidden="true"></i> Cart(<span id="cartItemCount"><%=inputItensCountg%></span>)
-                  </a>
-                  <div class="dropdown-menu">
-                    <div class="cart">
-                      <div id="cartItems"></div>
-                    </div>
-                  </div>
-             </div>
-        </div>
-        </div>
+<%- include('header') %>
 
 
       <ul>

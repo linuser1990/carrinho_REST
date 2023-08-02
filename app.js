@@ -7,6 +7,7 @@ const homeRoutes = require('./src/routes/routesHome')
 const produtosRoutes = require('./src/routes/routesProduto');
 const vendasRoutes = require('./src/routes/routesVenda')
 const shopping_cartRoutes = require('./src/routes/routesShopping_cart')
+const session = require('express-session');
 
 const app = express()
 
@@ -24,6 +25,13 @@ app.set('view engine', 'ejs')
 app.set('views', path.join(__dirname, 'src/views'))
 app.use(express.static(path.join(__dirname, '/')))
 
+// Configuração da sessão
+app.use(session({
+  secret: 'seu-segredo-aqui',
+  resave: false,
+  saveUninitialized: true
+}));
+
 // Rotas
 app.use('/clientes', clientesRoutes)
 app.use('/produtos', produtosRoutes);
@@ -32,6 +40,9 @@ app.use('/venda', vendasRoutes)
 app.use('/shopping_cart',shopping_cartRoutes)
 
 app.get('/', (req, res) => {
+  if (!req.session.totalItens) {
+    req.session.totalItens = 0;
+}
   res.redirect('/home')
 })
 
