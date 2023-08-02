@@ -15,28 +15,27 @@ const addCart = async (req, res) => {
     }
 
     if(achou) {
+        //ALTERA OS VALORES NA POSIÇÃO [i]  QUE PAROU O ARRAY
         listaDeObjetos[i].qtd = parseInt(listaDeObjetos[i].qtd) + 1
         listaDeObjetos[i].subtotal = parseFloat(listaDeObjetos[i].subtotal) + parseFloat(rows[0].precovenda)
-        console.log(listaDeObjetos[i].qtd)
-        console.log(listaDeObjetos[i].subtotal)
     } else {
         adicionarObjeto(codpro, rows[0].nome,rows[0].descricao,1,rows[0].precovenda)
     }
-    req.session.totalItens++
+    if (isNaN(req.session.totalItens)) {
+        req.session.totalItens = 1
+    } else {
+        req.session.totalItens++
+    }
     res.status(200).send(listaDeObjetos) 
 }
 
 const showIndexPage = async (req, res) => {
-    req.session.total = 0;
     const {rows} = await pool.query('select * from produto order by nome')
-    res.render('./shopping_cart/index',{totalSession: req.session.totalItens,title: 'NodeJS Shopping Cart', produto: rows})
+    res.render('./shopping_cart/index',{lista: listaDeObjetos,totalSession: req.session.totalItens,title: 'NodeJS Shopping Cart', produto: rows})
         
 }
 
 const showCartView = async (req, res) => {
-    //const inputItensCountg = req.body
-    const inputItensCountg = req.query.itensCount
-   // console.log(inputItensCountg)
     res.render('./shopping_cart/cart',{lista: listaDeObjetos,totalSession: req.session.totalItens})
 }
 

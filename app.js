@@ -40,9 +40,6 @@ app.use('/venda', vendasRoutes)
 app.use('/shopping_cart',shopping_cartRoutes)
 
 app.get('/', (req, res) => {
-  if (!req.session.totalItens) {
-    req.session.totalItens = 0;
-}
   res.redirect('/home')
 })
 
