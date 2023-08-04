@@ -1,5 +1,6 @@
 const pool = require('../db/db')
 var listaDeObjetos = []
+var total = 0
 
 const addCart = async (req, res) => {
     const {codpro} = req.body
@@ -18,6 +19,7 @@ const addCart = async (req, res) => {
         //ALTERA OS VALORES NA POSIÇÃO [i]  QUE PAROU O ARRAY
         listaDeObjetos[i].qtd = parseInt(listaDeObjetos[i].qtd) + 1
         listaDeObjetos[i].subtotal = parseFloat(listaDeObjetos[i].subtotal) + parseFloat(rows[0].precovenda)
+        
     } else {
         adicionarObjeto(codpro, rows[0].nome,rows[0].descricao,1,rows[0].precovenda)
     }
@@ -26,17 +28,21 @@ const addCart = async (req, res) => {
     } else {
         req.session.totalItens++
     }
+    total = parseFloat(total) + parseFloat(rows[0].precovenda)
+ 
+    req.session.total = total
+
     res.status(200).send(listaDeObjetos) 
 }
 
 const showIndexPage = async (req, res) => {
     const {rows} = await pool.query('select * from produto order by nome')
-    res.render('./shopping_cart/index',{lista: listaDeObjetos,totalSession: req.session.totalItens,title: 'NodeJS Shopping Cart', produto: rows})
+    res.render('./shopping_cart/index',{lista: listaDeObjetos,totalItensSession: req.session.totalItens,title: 'NodeJS Shopping Cart', produto: rows})
         
 }
 
 const showCartView = async (req, res) => {
-    res.render('./shopping_cart/cart',{lista: listaDeObjetos,totalSession: req.session.totalItens})
+    res.render('./shopping_cart/cart',{lista: listaDeObjetos,totalItensSession: req.session.totalItens,totalGeral: req.session.total})
 }
 
   
