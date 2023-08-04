@@ -24,22 +24,23 @@
   <!--MÉTODO 1 DE EXIBIR OS ITENS ADICIONADOS-->    
   <script> 
     function addCart(codigo) {
-      //Atualiza numero itens Cart()
-      updateCartItemCount()
 
       var total = 0
 
+      const cartItemCount = document.getElementById("cartItemCount");
+
       //CHAMA A ROTA e passa o parametro codpro
       $.post("/shopping_cart/add", {codpro: codigo}, function (resposta) {
-       
-        if (Array.isArray(resposta)) {
+
+        if (Array.isArray(resposta.listaDeObjetos)) {
+    
           const cartItemsElement = document.getElementById('cartItems');
 
           // Limpar o conteúdo atual do itens-menu
           cartItemsElement.innerHTML = '';
 
           // Iterar sobre cada objeto na 'listaDeObjetos'
-          resposta.forEach(itens => {
+          resposta.listaDeObjetos.forEach(itens => {
 
             //DEFINE A LINHA
             const itemDiv = document.createElement('div');
@@ -92,7 +93,10 @@
         cartItemsElement.appendChild(totalElement);
         cartItemsElement.appendChild(divBtn);
 
-         
+       //Atualiza numero itens Cart()
+       // resposta.totalItens FOI ENVIADO JUNTAMENTE COM A listaDEObjetos, na mesma resposta
+       cartItemCount.textContent = resposta.totalItens;
+ 
         } else {
           console.error('Resposta inválida do servidor.');
         }

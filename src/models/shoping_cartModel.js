@@ -32,7 +32,9 @@ const addCart = async (req, res) => {
  
     req.session.total = total
 
-    res.status(200).send(listaDeObjetos) 
+    //RESPONDE A listaDeObjetos e tambem a req.session.totalItens 
+    //para atualizar no frontend o elemento Cart()
+    res.json({listaDeObjetos: listaDeObjetos,totalItens: req.session.totalItens})
 }
 
 const showIndexPage = async (req, res) => {
@@ -43,6 +45,11 @@ const showIndexPage = async (req, res) => {
 
 const showCartView = async (req, res) => {
     res.render('./shopping_cart/cart',{lista: listaDeObjetos,totalItensSession: req.session.totalItens,totalGeral: req.session.total})
+}
+
+const updateItensCart = async (req, res) => {
+    const qtdItens = req.body
+    req.session.totalItens = qtdItens
 }
 
   
@@ -63,5 +70,6 @@ module.exports = {
     showIndexPage,
     addCart,
     showCartView,
+    updateItensCart,
     listaDeObjetos
 }

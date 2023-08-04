@@ -1,8 +1,11 @@
-    // Set an initial cart item count
-    let itemCount = 0;
+
 
     // Function to update the cart item count and the link text
     function updateCartItemCount() {
+
+      // Set an initial cart item count
+       let itemCount = 0;
+
       const cartItemCount = document.getElementById("cartItemCount");
       const inputItensCount = document.getElementById('inputItensCount')
 
@@ -14,6 +17,10 @@
 
       //SETA O ITEMCOUNT NO INPUT HIDDEN PARA PEGAR o itemCount no Backend
       inputItensCount.value = itemCount;
+
+      $.post('/shopping_cart/updateItensCart',{qtdItens: itemCount},function(res) {
+
+      })
       
     }
 
