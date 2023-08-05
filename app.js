@@ -32,6 +32,14 @@ app.use(session({
   saveUninitialized: true
 }));
 
+// Middleware para desabilitar o cache
+app.use((req, res, next) => {
+  res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+  res.setHeader('Pragma', 'no-cache');
+  res.setHeader('Expires', '0');
+  next();
+});
+
 // Rotas
 app.use('/clientes', clientesRoutes)
 app.use('/produtos', produtosRoutes);
@@ -41,7 +49,7 @@ app.use('/shopping_cart',shopping_cartRoutes)
 
 app.get('/', (req, res) => {
   res.redirect('/home')
-})
+ })
 
 // Porta em que o servidor irá rodar
 const PORT = process.env.PORT

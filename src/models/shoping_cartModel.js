@@ -1,6 +1,6 @@
 const pool = require('../db/db')
 var listaDeObjetos = []
-var total = 0
+var total = 0   
 
 const addCart = async (req, res) => {
     const {codpro} = req.body
@@ -28,18 +28,21 @@ const addCart = async (req, res) => {
     } else {
         req.session.totalItens++
     }
-    total = parseFloat(total) + parseFloat(rows[0].precovenda)
+    req.session.total = parseFloat(req.session.total) + parseFloat(rows[0].precovenda)
  
-    req.session.total = total
-
     //RESPONDE A listaDeObjetos e tambem a req.session.totalItens 
     //para atualizar no frontend o elemento Cart()
-    res.json({listaDeObjetos: listaDeObjetos,totalItens: req.session.totalItens})
+    res.json({listaDeObjetos: listaDeObjetos,totalItens: req.session.totalItens, totalGeral: req.session.total })
 }
 
 const showIndexPage = async (req, res) => {
+    //VERIFICA SE É A PRIMEIRA VEZ QUE ABRIU A PAGINA
+    if(req.session.total == null) {
+        req.session.total = 0
+    }
+    
     const {rows} = await pool.query('select * from produto order by nome')
-    res.render('./shopping_cart/index',{lista: listaDeObjetos,totalItensSession: req.session.totalItens,title: 'NodeJS Shopping Cart', produto: rows})
+    res.render('./shopping_cart/index',{totalGeral: req.session.total,lista: listaDeObjetos,totalItensSession: req.session.totalItens,title: 'NodeJS Shopping Cart', produto: rows})
         
 }
 
@@ -50,6 +53,22 @@ const showCartView = async (req, res) => {
 const updateItensCart = async (req, res) => {
     const qtdItens = req.body
     req.session.totalItens = qtdItens
+}
+
+const removeProductCart = async (req, res) => {
+    const codpro = req.params.codpro
+
+    for (var i = 0; i<listaDeObjetos.length; i++) {
+        if (listaDeObjetos[i].codpro === codpro ) {
+            req.session.totalItens = parseInt(req.session.totalItens) - parseInt(listaDeObjetos[i].qtd)
+            req.session.total = parseFloat(req.session.total) - parseFloat(listaDeObjetos[i].subtotal)
+            listaDeObjetos.splice(i,1)
+            break
+        }
+    }
+
+    res.render('./shopping_cart/cart',{totalItensSession: req.session.totalItens, lista: listaDeObjetos, totalGeral: req.session.total})
+    console.log('session total:'+req.session.total)
 }
 
   
@@ -71,5 +90,6 @@ module.exports = {
     addCart,
     showCartView,
     updateItensCart,
+    removeProductCart,
     listaDeObjetos
 }
