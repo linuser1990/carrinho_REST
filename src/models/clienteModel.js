@@ -47,15 +47,17 @@ const createCliente = async (req, res) => {
 
 // Atualizar um cliente
 const updateCliente = async (req, res) => {
+  
   const { codcli } = req.params
   const { nome, endereco, cpf, cel } = req.body
 
+  
   try {
     const { rows } = await pool.query('UPDATE cliente SET nome = $1, endereco= $2, ' +
     'cpf = $3, cel = $4 WHERE codcli = $5 RETURNING *', [nome, endereco, cpf, cel, codcli])
 
     if (rows.length > 0) {
-      res.redirect('/clientes')
+      res.status(200).json({ message: 'Cliente atualizado com sucesso' })
     } else {
       res.status(404).json({ error: 'Cliente não encontrado' })
     }

@@ -7,9 +7,8 @@ router.get('/create/', clienteController.showCreateView)// abre a pagina de cada
 router.get('/formClienteMaisComprou',clienteController.formClienteMaisComprou)
 router.get('/:codcli', clienteController.getClienteById)
 router.delete('/:codcli', clienteController.deleteCliente)
-//router.put('/:codcli', clienteController.updateCliente2);
+router.put('/:codcli', clienteController.updateCliente);
 router.post('/', clienteController.createCliente)
 router.post('/relClienteMaisComprouPeriodo',clienteController.relClienteMaisComprouPeriodo)
-router.post('/:codcli', clienteController.updateCliente)
 
 module.exports = router

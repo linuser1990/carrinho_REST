@@ -68,7 +68,7 @@ const removeProductCart = async (req, res) => {
     }
 
     res.render('./shopping_cart/cart',{totalItensSession: req.session.totalItens, lista: listaDeObjetos, totalGeral: req.session.total})
-    console.log('session total:'+req.session.total)
+    
 }
 
   

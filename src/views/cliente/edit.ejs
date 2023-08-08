@@ -1,7 +1,7 @@
 <%- include('../header'); %>
-
-<form method="post" action="/clientes/<%=pessoas[0].codcli%>">
-    
+<!-- <form id="formEditarCliente" method="post" action="/clientes/<%=pessoas[0].codcli%>"> -->
+  
+<form id="formEditarCliente" method="post" >    
 	<table class="styled-table">
 
 		<th>
@@ -71,5 +71,47 @@
 <input type="submit" value="Alterar"> 
 <input type="button" value="Cancelar" onclick="cancelar();">
 </form>
+
+<script>
+    $("#formEditarCliente").submit(function (event) {
+      event.preventDefault(); // Evita que a página seja recarregada
+
+      const codcli = document.getElementById('codcli').value
+	  const nome = document.getElementById('nome').value
+	  const endereco = document.getElementById('endereco').value
+	  const cel = document.getElementById('cel').value
+	  const cpf = document.getElementById('cpf').value
+
+	  const data = {
+        nome,endereco,cel,cpf
+      };
+
+
+	const url = '/clientes/'+codcli
+	 
+    fetch(url, {
+      method: 'PUT',
+      headers: {
+            'Content-Type': 'application/json'
+          },
+      body: JSON.stringify(data)
+    })
+        
+		.then(response => {
+		if (response.ok) {
+			console.log('Resource updated successfully');
+			window.location.href = '/clientes'
+		} else {
+			console.error('Failed to update resource');
+		}
+		})
+		.catch(error => {
+		console.error('An error occurred:', error);
+		});
+
+	})
+  
+</script>
+
 
 <%- include('../footer'); %>
