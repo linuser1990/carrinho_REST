@@ -7,6 +7,7 @@ const homeRoutes = require('./src/routes/routesHome')
 const produtosRoutes = require('./src/routes/routesProduto');
 const vendasRoutes = require('./src/routes/routesVenda')
 const shopping_cartRoutes = require('./src/routes/routesShopping_cart')
+const loginRoutes = require('./src/routes/routesLogin')
 const session = require('express-session');
 
 const app = express()
@@ -32,6 +33,7 @@ app.use(session({
   saveUninitialized: true
 }));
 
+
 // Middleware para desabilitar o cache
 app.use((req, res, next) => {
   res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
@@ -40,7 +42,9 @@ app.use((req, res, next) => {
   next();
 });
 
+
 // Rotas
+app.use('/login',loginRoutes)
 app.use('/clientes', clientesRoutes)
 app.use('/produtos', produtosRoutes);
 app.use('/home', homeRoutes)
@@ -48,7 +52,7 @@ app.use('/venda', vendasRoutes)
 app.use('/shopping_cart',shopping_cartRoutes)
 
 app.get('/', (req, res) => {
-  res.redirect('/home')
+  res.redirect('/login')
  })
 
 // Porta em que o servidor irá rodar
