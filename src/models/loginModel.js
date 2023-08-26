@@ -38,15 +38,19 @@ const validaLogin = async (req, res) => {
 
                 const token = jwt.sign({ username: dadosUsuario.nome}, secretKey)
                 req.session.username = dadosUsuario.nome
+                res.status(200).json({ success: true, user: req.session.username, token: token});
                 //res.redirect(`/home?token=${token}`)
-                res.render('./home/index',{user: req.session.username})
+                // res.render('./home/index',{user: req.session.username, token: token})
 
             } else {
                 console.log('Senha incorreta.');
+                res.json({success: false, message: 'Senha incorreta.'})
             }
         } else {
             console.log('Usuário não encontrado.');
-            res.redirect('/login')
+
+            res.json({success: false, message: 'Usuário não encontrado'})
+           //res.redirect('/login')
         }
   } catch (error) {
         console.error('Erro ao autenticar usuário:', error);

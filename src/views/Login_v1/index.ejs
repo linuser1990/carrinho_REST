@@ -30,7 +30,7 @@
 					<img src="/src/views/Login_v1/images/img-01.png" alt="IMG">
 				</div>
 
-				<form class="login100-form validate-form" method="post" action="/login">
+				<form class="login100-form validate-form" name="loginForm" id="loginForm" method="post" >
 					<span class="login100-form-title">
 						Member Login
 					</span>
@@ -57,6 +57,8 @@
 						</button>
 					</div>
 
+					<p id="errorMessage" style="color: red;"></p>
+					
 					<div class="text-center p-t-12">
 						<span class="txt1">
 							Esqueceu
@@ -76,6 +78,41 @@
 			</div>
 		</div>
 	</div>
+
+
+    <script>
+        const loginForm = document.getElementById('loginForm');
+        const errorMessage = document.getElementById('errorMessage');
+
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const email= document.getElementById('email').value;
+            const senha = document.getElementById('senha').value;
+
+            try {
+                const response = await fetch('/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email, senha })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    // Autenticação bem-sucedida, redirecionar para a página de dashboard
+                    window.location.href = '/home';
+                } else {
+                    // Exibir a mensagem de erro
+                    errorMessage.textContent = data.message;
+                }
+            } catch (error) {
+                console.error('Erro ao fazer a requisição:', error);
+            }
+        });
+    </script>
 	
 	
 
