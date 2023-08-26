@@ -53,6 +53,7 @@ app.use('/shopping_cart',shopping_cartRoutes)
 
 app.get('/', (req, res) => {
   res.redirect('/login')
+  req.session.username = 'user'
  })
 
 // Porta em que o servidor irá rodar

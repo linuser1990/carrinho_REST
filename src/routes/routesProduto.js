@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 const produtoController = require('../models/produtoModel')
 
+
 router.get('/',produtoController.getAllProdutos)
 router.get('/create',produtoController.showCreateView)
 router.post('/updateProduto/:codpro',produtoController.updateProduto)

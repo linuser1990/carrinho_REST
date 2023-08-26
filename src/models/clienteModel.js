@@ -1,6 +1,7 @@
 const pool = require('../db/db')
 const PDFDocument = require('pdfkit')
 const { exec } = require('shelljs')
+const bcrypt = require('bcrypt');
 // const open = require('open');
 // const ordem = "nome";
 
@@ -35,10 +36,12 @@ const getClienteById = async (req, res) => {
 
 // Criar um novo cliente
 const createCliente = async (req, res) => {
-  const { nome, endereco, cpf, cel } = req.body
+  const { nome, endereco, cpf, cel, email, senha } = req.body
+ 
+  const hashedPassword = await bcrypt.hash(senha, 10); // Gera o hash da senha
 
   try {
-    const { rows } = await pool.query('INSERT INTO cliente (nome,endereco,cpf,cel) VALUES ($1,$2,$3,$4) RETURNING *', [nome, endereco, cpf, cel])
+    const { rows } = await pool.query('INSERT INTO cliente (nome,endereco,cpf,cel,email,senha) VALUES ($1,$2,$3,$4,$5,$6) RETURNING *', [nome, endereco, cpf, cel, email, hashedPassword ])
     res.redirect('/clientes')
   } catch (error) {
     res.status(500).json({ error: 'Erro ao criar o cliente' })
@@ -49,12 +52,12 @@ const createCliente = async (req, res) => {
 const updateCliente = async (req, res) => {
   
   const { codcli } = req.params
-  const { nome, endereco, cpf, cel } = req.body
+  const { nome, endereco, cpf, cel, email} = req.body
 
   
   try {
     const { rows } = await pool.query('UPDATE cliente SET nome = $1, endereco= $2, ' +
-    'cpf = $3, cel = $4 WHERE codcli = $5 RETURNING *', [nome, endereco, cpf, cel, codcli])
+    'cpf = $3, cel = $4 , emial = $5 WHERE codcli = $6 RETURNING *', [nome, endereco, cpf, cel,email, codcli])
 
     if (rows.length > 0) {
       res.status(200).json({ message: 'Cliente atualizado com sucesso' })
