@@ -4,6 +4,7 @@ const controller = require('../models/loginModel')
  
 
 router.get('/',controller.showViewLogin)
+router.get('/logout',controller.logoutAccount)
 router.post('/',controller.validaLogin)
 
 

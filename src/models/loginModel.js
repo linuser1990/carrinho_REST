@@ -7,7 +7,7 @@ const secretKey = 'secreto';
 
 const showViewLogin = async (req, res) => {
   // Verifica se já está autenticado, e se sim, redireciona para a página inicial
-  if (req.user) {
+  if (req.session.username) {
      return res.redirect('/home');
   }
   res.render('./Login_v1/index')
@@ -38,7 +38,8 @@ const validaLogin = async (req, res) => {
 
                 const token = jwt.sign({ username: dadosUsuario.nome}, secretKey)
                 req.session.username = dadosUsuario.nome
-                res.status(200).json({ success: true, user: req.session.username, token: token});
+                req.session.token = token
+                res.status(200).json({ success: true, user: req.session.username, token: req.session.token});
                 //res.redirect(`/home?token=${token}`)
                 // res.render('./home/index',{user: req.session.username, token: token})
 
@@ -58,8 +59,25 @@ const validaLogin = async (req, res) => {
 
 }
 
+const isAuthenticated = (req, res, next) => {
+  if (req.session.username) {
+    // O usuário está autenticado, siga para a próxima rota
+    next();
+  } else {
+    // O usuário não está autenticado, redirecione para a página de login
+    res.redirect('/login');
+  }
+};
+
+const logoutAccount = async (req, res) => {
+  req.session.username = null
+  res.redirect('/login')
+}
+
 module.exports = {
   showViewLogin,
   validaLogin,
+  isAuthenticated,
+  logoutAccount
  
 }

@@ -88,7 +88,7 @@ const deleteCliente = async (req, res) => {
 
 const showCreateView = async (req, res) => {
   try {
-    res.render('./cliente/create')
+    res.render('./cliente/create',{user: req.session.username})
   } catch (error) {
     res.status(500).json({ error: 'Erro 000', error })
   }
