@@ -3,7 +3,6 @@ const router = express.Router()
 const clienteController = require('../models/clienteModel')
 const logincontroller = require('../models/loginModel')
  
-
 // Middleware para autenticação 
 router.use(logincontroller.isAuthenticated);
 

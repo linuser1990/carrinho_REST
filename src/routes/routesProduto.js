@@ -1,7 +1,10 @@
 const express = require('express')
 const router = express.Router()
 const produtoController = require('../models/produtoModel')
-
+const logincontroller = require('../models/loginModel')
+ 
+// Middleware para autenticação 
+router.use(logincontroller.isAuthenticated);
 
 router.get('/',produtoController.getAllProdutos)
 router.get('/create',produtoController.showCreateView)

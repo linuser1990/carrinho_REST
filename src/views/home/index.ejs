@@ -328,11 +328,51 @@
     </div>
     <br>
     <h6>Usuário Logado:<%=user%></h6>
-    <div style="text-align: right;" ><a href="/login/logout"><h1>Sair</h1></a></div>
+
+    <div style="text-align: right;" >
+      <a href="/login/logout"><h1>Sair</h1></a>
+    </div>
 
     <!-- Adicionando o JS do Bootstrap -->
     <script src="/src/js/code.jquery.com_jquery-3.3.1.slim.min.js"></script>
     <script src="/src/js/cdnjs.cloudflare.com_ajax_libs_popper.js_1.12.9_umd_popper.min.js"></script>
     <script src="/src/js/stackpath.bootstrapcdn.com_bootstrap_4.3.1_js_bootstrap.min.js"></script>
+  
+    <!--ESSE SCRIPT VERIFICA A ATIVIDADE NA PAGINA
+        SE NÃO MECHER O MOUSE OU NAO DIGITAR OU 
+        NAO ROLAR A PAGINA NO CASO DE CELULAR, 
+        É REDIRECIONADO PARA TELA DE LOGIN NOVAMENTE-->
+    <script>
+      let inactivityTimeout;
+
+      
+         // Função para reiniciar o temporizador de inatividade
+         function resetInactivityTimer() {
+            clearTimeout(inactivityTimeout);
+            inactivityTimeout = setTimeout(function() {
+                // Exibir um alerta quando o tempo de inatividade expirar
+                alert('Sessão expirou. Clique em OK para fazer logout.');
+                // Após clicar em OK, chamar a função logout
+                logout();
+            }, 5000); // 3 minutos de inatividade
+        }
+
+      // Função para fazer logout
+      function logout() {
+          window.location.href = '/login/logout';
+      }
+
+      // Monitorar eventos de movimentação do cursor
+      document.addEventListener('mousemove', resetInactivityTimer);
+
+      // Monitorar eventos de digitação
+      document.addEventListener('keydown', resetInactivityTimer);
+
+      document.addEventListener('touchstart', resetInactivityTimer);
+      document.addEventListener('touchmove', resetInactivityTimer);
+
+      // Iniciar o temporizador de inatividade ao carregar a página
+      resetInactivityTimer();
+    </script>
   </body>
 </html>

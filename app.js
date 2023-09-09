@@ -9,6 +9,9 @@ const vendasRoutes = require('./src/routes/routesVenda')
 const shopping_cartRoutes = require('./src/routes/routesShopping_cart')
 const loginRoutes = require('./src/routes/routesLogin')
 const session = require('express-session');
+const socketIo = require('socket.io');
+const sharedSession = require('express-socket.io-session');
+const http = require('http');
 
 const app = express()
 
@@ -30,9 +33,11 @@ app.use(express.static(path.join(__dirname, '/')))
 app.use(session({
   secret: 'seu-segredo-aqui',
   resave: false,
-  saveUninitialized: true
+  saveUninitialized: true,
+  cookie: {
+    cookie: { secure: false }
+  }
 }));
-
 
 // Middleware para desabilitar o cache
 app.use((req, res, next) => {
