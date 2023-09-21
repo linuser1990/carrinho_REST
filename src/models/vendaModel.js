@@ -12,7 +12,7 @@ const showVendaView = async (req, res) => {
   try {
     const rowsCli = await pool.query('SELECT * FROM cliente ORDER BY nome')
     const rowsPro = await pool.query('SELECT * FROM produto ORDER BY nome')
-    res.render('./venda/create', { clientes: rowsCli.rows, produtos: rowsPro.rows })
+    res.render('./venda/create', { clientes: rowsCli.rows, produtos: rowsPro.rows , user : req.session.username})
   } catch (error) {
     console.log(error)
   }
@@ -113,7 +113,7 @@ const historicoVendas = async (req, res) => {
   ' venda.cliente_codcli = cliente.codcli ' +
   ' order by codvenda desc')
 
-  res.render('./venda/index', { resultado: rows })
+  res.render('./venda/index', { resultado: rows , user: req.session.username})
 }
 
 // CHAMA PAGINA DETALHES VENDA E MOSTRA OS PRODUTOS APENAS DA VENDA SELECIONADA
@@ -125,7 +125,7 @@ const detalhesVenda = async (req, res) => {
      ' inner join venda on venda.codvenda = itens_venda.venda_codvenda ' +
      ' inner join cliente on cliente.codcli = venda.cliente_codcli where codvenda=' + codigo_venda + ' group by (venda.codvenda,produto.codpro,itens_venda.venda_codvenda,itens_venda.produto_codpro,itens_venda.subtotal,itens_venda.qtd,cliente.codcli)  order by venda.codvenda desc ')
 
-    res.render('./reports/detalhesVenda', { varTitle: 'Sistema de Vendas - Venda', resultado: resultados.rows })
+    res.render('./reports/detalhesVenda', { varTitle: 'Sistema de Vendas - Venda', resultado: resultados.rows, user: req.session.username })
   } catch (err) {
     console.error(err.message)
     res.status(500).send('Erro no servidor')
@@ -140,7 +140,7 @@ const detalhesTodasVendas = async (req, res) => {
      ' inner join venda on venda.codvenda = itens_venda.venda_codvenda ' +
      ' inner join cliente on cliente.codcli = venda.cliente_codcli group by (venda.codvenda,produto.codpro,itens_venda.venda_codvenda,itens_venda.produto_codpro,itens_venda.subtotal,itens_venda.qtd,cliente.codcli) order by venda.codvenda desc')
 
-    res.render('./reports/detalhesTodasVendas', { varTitle: 'Sistema de Vendas - Venda', resultado: resultados.rows })
+    res.render('./reports/detalhesTodasVendas', { varTitle: 'Sistema de Vendas - Venda', resultado: resultados.rows, user: req.session.username })
   } catch (err) {
     console.error(err.message)
     res.status(500).send('Erro no servidor')
