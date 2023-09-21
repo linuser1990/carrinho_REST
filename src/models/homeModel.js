@@ -1,6 +1,6 @@
 
 const redirecionaHome = async (req, res) => {
-   res.render('./home/index',{ user: req.session.username })
+   res.render('./home/index')
 }
 
 module.exports = {

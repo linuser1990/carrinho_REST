@@ -6,6 +6,9 @@ const logincontroller = require('../models/loginModel')
 // Middleware para autenticação 
 router.use(logincontroller.isAuthenticated);
 
+//Middleware que passa usuario logado
+router.use(logincontroller.addUserToResponse)
+
 // Rotas para os clientes
 router.get('/', clienteController.getAllClientes);
 router.get('/create/', clienteController.showCreateView);

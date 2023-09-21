@@ -59,6 +59,7 @@ const validaLogin = async (req, res) => {
 
 }
 
+//middleware
 const isAuthenticated = (req, res, next) => {
   if (req.session.username) {
     // O usuário está autenticado, siga para a próxima rota
@@ -67,6 +68,14 @@ const isAuthenticated = (req, res, next) => {
     // O usuário não está autenticado, redirecione para a página de login
     res.redirect('/login');
   }
+};
+
+// Middleware para adicionar o nome de usuário à resposta
+const addUserToResponse = (req, res, next) => {
+  if (req.session.username) {
+    res.locals.user = req.session.username;
+  }
+  next();
 };
 
 const logoutAccount = async (req, res) => {
@@ -78,6 +87,7 @@ module.exports = {
   showViewLogin,
   validaLogin,
   isAuthenticated,
-  logoutAccount
+  logoutAccount,
+  addUserToResponse 
  
 }

@@ -4,7 +4,10 @@ const produtoController = require('../models/produtoModel')
 const logincontroller = require('../models/loginModel')
  
 // Middleware para autenticação 
-router.use(logincontroller.isAuthenticated);
+router.use(logincontroller.isAuthenticated)
+
+//Middleware que passa usuario logado
+router.use(logincontroller.addUserToResponse)
 
 router.get('/',produtoController.getAllProdutos)
 router.get('/create',produtoController.showCreateView)
