@@ -13,7 +13,7 @@ function resetInactivityTimer () {
     alert('A sessão expirou. Clique em OK para fazer logout.')
     // Após clicar em OK, chamar a função logout
     logout()
-  }, 5000) //  minutos de inatividade
+  }, 50000) //  minutos de inatividade
 }
 
 // Função para fazer logout

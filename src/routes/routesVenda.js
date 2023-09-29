@@ -6,6 +6,9 @@ const logincontroller = require('../models/loginModel')
 // Middleware para autenticação 
 router.use(logincontroller.isAuthenticated);
 
+//Middleware para passar usuario logado
+router.use(logincontroller.addUserToResponse)
+
 router.get('/formProdutosMaisVendidosPeriodo',controllerVenda.formProdutosMaisVendidosPeriodo)
 router.get('/verificaPrecoVenda',controllerVenda.verificaPrecoVenda)
 router.get('/removeDoCarrinho',controllerVenda.removeDoCarrinho)

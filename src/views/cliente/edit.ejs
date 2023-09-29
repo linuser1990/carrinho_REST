@@ -60,6 +60,14 @@
 			<td>
 				<input type="text" name="cel" id="cel" value="<%=pessoas[0].cel%>">
 			</td>
+
+			<td class="label">
+				Email:
+			</td>
+
+			<td>
+				<input type="text" name="email" id="email" value="<%=pessoas[0].email%>">
+			</td>
 		</tr>
 
 
@@ -81,9 +89,10 @@
 	  const endereco = document.getElementById('endereco').value
 	  const cel = document.getElementById('cel').value
 	  const cpf = document.getElementById('cpf').value
+	  const email = document.getElementById('email').value
 
 	  const data = {
-        nome,endereco,cel,cpf
+        nome,endereco,cel,cpf,email
       };
 
 
