@@ -47,7 +47,6 @@ app.use((req, res, next) => {
   next();
 });
 
-
 // Rotas
 app.use('/login',loginRoutes)
 app.use('/clientes', clientesRoutes)
