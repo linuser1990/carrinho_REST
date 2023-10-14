@@ -7,7 +7,7 @@
    <br>
    <input id="codpro" name="codpro" hidden>
    <input id="inputItensCount" name="inputItensCount" hidden>
-    <% for (var i =0;i<=5;i++) { %>
+    <% for (var i =0;i<produto.length;i++) { %>
     <div class="thumbnail">
         <div class="caption">
           <h3><%=produto[i].nome%></h3>
@@ -19,7 +19,9 @@
             </div>
         </div>
       </div>
-      <% } %>
+      <%//EXIBE APENAS 5 PRODUTOS
+        if(i==4){break}} 
+      %>
 
   <!--MÉTODO 1 DE EXIBIR OS ITENS ADICIONADOS-->    
   <script> 
